@@ -131,40 +131,43 @@ function isActive(href: string) {
 </style>
 
 <script>
-  const THEME_COLORS: Record<string, string> = {
+  const THEME_COLORS = {
     espresso: '#12100e',
     studio:   '#faf8f5',
     midnight: '#0d1526',
     rose:     '#110e0e',
   };
 
-  function init() {
-    const html = document.documentElement;
+  let cleanup = () => {};
 
-    // Close mobile menu on each navigation
+  function syncSwatches() {
+    const current = document.documentElement.getAttribute('data-theme') || 'espresso';
+    document.querySelectorAll('[data-theme-btn]').forEach((el) => {
+      el.toggleAttribute('data-active', el.getAttribute('data-theme-btn') === current);
+    });
+  }
+
+  function init() {
+    // Tear down previous listeners before re-attaching (prevents duplicates)
+    cleanup();
+    const ac = new AbortController();
+    const { signal } = ac;
+    cleanup = () => ac.abort();
+
+    const html = document.documentElement;
     const menu = document.getElementById('mobile-nav');
     const toggleBtn = document.getElementById('nav-toggle-btn');
+
+    // Reset mobile menu state on every navigation
     menu?.classList.add('hidden');
     toggleBtn?.setAttribute('aria-expanded', 'false');
 
-    // Mobile menu toggle
     toggleBtn?.addEventListener('click', () => {
       const open = toggleBtn.getAttribute('aria-expanded') === 'true';
       toggleBtn.setAttribute('aria-expanded', String(!open));
       menu?.classList.toggle('hidden', open);
-    });
+    }, { signal });
 
-    // Sync swatch active state
-    const syncSwatches = () => {
-      const current = html.getAttribute('data-theme') || 'espresso';
-      document.querySelectorAll('[data-theme-btn]').forEach((el) => {
-        el.toggleAttribute('data-active', el.getAttribute('data-theme-btn') === current);
-      });
-    };
-
-    syncSwatches();
-
-    // Theme switch
     document.querySelectorAll('[data-theme-btn]').forEach((el) => {
       el.addEventListener('click', () => {
         const theme = el.getAttribute('data-theme-btn');
@@ -173,12 +176,17 @@ function isActive(href: string) {
         html.setAttribute('data-theme', theme);
         localStorage.setItem('ev-theme', theme);
         syncSwatches();
+        const color = THEME_COLORS[theme as keyof typeof THEME_COLORS];
         document.querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', THEME_COLORS[theme] ?? '#12100e');
+          ?.setAttribute('content', color ?? '#12100e');
         setTimeout(() => html.classList.remove('theme-transitioning'), 300);
-      });
+      }, { signal });
     });
+
+    syncSwatches();
   }
 
+  // Call immediately — astro:page-load fires before module scripts register on initial load
+  init();
   document.addEventListener('astro:page-load', init);
 </script>
