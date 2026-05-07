@@ -5,6 +5,8 @@ pubDate: 2025-03-15
 updatedDate: 2026-05-06
 author: "Elara Voss"
 tags: ["Astro", "React", "Performance", "Frontend"]
+heroImage: "../../assets/images/hero-ditching-react.jpg"
+ogImage: "/og-ditching-react.jpg"
 ---
 
 Last year I did something that would have felt heretical to me three years ago: I convinced a client to let me rebuild their marketing site in Astro instead of the React + Next.js stack we'd been using for years. The brief was simple — their Core Web Vitals were terrible and organic search was suffering for it. Six months later, their Lighthouse Performance score went from 54 to 100. This is the story of that switch, and why I've now migrated five more projects.

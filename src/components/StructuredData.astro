@@ -8,6 +8,7 @@ interface Props {
   author?: string;
   pageUrl?: string;
   tags?: string[];
+  ogImage?: string;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   author = 'Elara Voss',
   pageUrl = Astro.url.href,
   tags = [],
+  ogImage,
 } = Astro.props;
 
 const siteUrl = 'https://elaravoss.dev';
@@ -53,9 +55,9 @@ const graph: object[] = [
     url: `${siteUrl}/`,
     image: {
       '@type': 'ImageObject',
-      url: `${siteUrl}/og-default.svg`,
-      width: 1200,
-      height: 630,
+      url: `${siteUrl}/headshot.jpg`,
+      width: 400,
+      height: 400,
     },
     sameAs: [
       'https://github.com/elaravoss',
@@ -105,7 +107,7 @@ if (type === 'blogposting' && title && description && pubDate) {
     url: pageUrl,
     image: {
       '@type': 'ImageObject',
-      url: `${siteUrl}/og-default.svg`,
+      url: ogImage ? `${siteUrl}${ogImage}` : `${siteUrl}/og-default.jpg`,
       width: 1200,
       height: 630,
     },

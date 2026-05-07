@@ -5,6 +5,8 @@ pubDate: 2025-01-22
 updatedDate: 2026-05-06
 author: "Elara Voss"
 tags: ["Performance", "Core Web Vitals", "SEO", "JavaScript"]
+heroImage: "../../assets/images/hero-cwv-guide.jpg"
+ogImage: "/og-cwv-guide.jpg"
 ---
 
 Google's [Core Web Vitals](https://web.dev/articles/vitals) have been a ranking signal since 2021. Most engineering teams know this. Fewer teams have actually done the work to achieve "Good" ratings across all three metrics. I've spent the last two years doing Core Web Vitals audits and fixes for clients across e-commerce, SaaS, and media. Here's what I've learned.

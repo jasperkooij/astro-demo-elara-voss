@@ -5,6 +5,8 @@ pubDate: 2025-02-08
 updatedDate: 2026-05-06
 author: "Elara Voss"
 tags: ["Design Systems", "TypeScript", "React", "Productivity"]
+heroImage: "../../assets/images/hero-design-system.jpg"
+ogImage: "/og-design-system.jpg"
 ---
 
 In 2022, I joined a fintech company as their first dedicated frontend architect. They had twelve product teams, each building their own version of a button. Not metaphorically — twelve distinct button implementations, with different hover states, different focus rings, different loading behaviors. One team's primary button was 40px tall. Another's was 36px. The QA team had a spreadsheet tracking the inconsistencies.
