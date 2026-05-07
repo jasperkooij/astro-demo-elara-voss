@@ -1,106 +1,125 @@
 # GEO Audit Report: Elara Voss Portfolio
 
-**Audit Date:** 2026-05-06
+**Audit Date:** 2026-05-07 (re-audit — previous: 2026-05-06)
 **URL:** https://astro-demo-elara-voss.pages.dev/ (canonical: elaravoss.dev)
 **Business Type:** Personal Developer Portfolio / Agency (Services)
-**Pages Analyzed:** 8
+**Pages Analyzed:** 9
 
 ---
 
 ## Executive Summary
 
-**Overall GEO Score: 61/100 (Fair)**
+**Overall GEO Score: 67/100 (Fair → approaching Good)**
 
-The site has an unusually strong technical foundation for a portfolio — explicit AI crawler allowances, a well-structured llms.txt, zero-JS SSG architecture on Cloudflare's edge CDN, and blog content with specific quantified claims that are genuinely citation-grade. These push the technical and citability scores well above average. The ceiling is set by two structural limitations: a fictional persona with no external brand presence on the authoritative platforms AI models use for entity verification (Wikipedia, Reddit, YouTube), and a schema layer with a critical duplicate-block bug on blog posts and missing required properties (image, dateModified) that block rich result eligibility.
+Score improved +6 points over the 2026-05-06 baseline (61/100). The session delivered the two highest-leverage improvements available: raster images in JSON-LD schema (fixing two critical rich-result eligibility blocks) and Markdown endpoints for all blog posts with auto-discovery link tags (directly improving AI crawler access to citation-grade content). One regression was introduced: blog post `og:image` meta tags are now emitting relative URLs instead of absolute URLs — social crawlers and AI systems will fail to load the images. This is the top-priority fix.
 
 ### Score Breakdown
 
-| Category | Score | Weight | Weighted Score |
-|---|---|---|---|
-| AI Citability | 79/100 | 25% | 19.75 |
-| Brand Authority | 22/100 | 20% | 4.40 |
-| Content E-E-A-T | 64/100 | 20% | 12.80 |
-| Technical GEO | 91/100 | 15% | 13.65 |
-| Schema & Structured Data | 47/100 | 10% | 4.70 |
-| Platform Optimization | 54/100 | 10% | 5.40 |
-| **Overall GEO Score** | | | **60.7 → 61/100** |
+| Category | Score | Δ | Weight | Weighted Score |
+|---|---|---|---|---|
+| AI Citability | 88/100 | +9 | 25% | 22.00 |
+| Brand Authority | 22/100 | 0 | 20% | 4.40 |
+| Content E-E-A-T | 65/100 | +1 | 20% | 13.00 |
+| Technical GEO | 97/100 | +6 | 15% | 14.55 |
+| Schema & Structured Data | 72/100 | +25 | 10% | 7.20 |
+| Platform Optimization | 60/100 | +6 | 10% | 6.00 |
+| **Overall GEO Score** | | **+6** | | **67/100** |
+
+### What Changed This Session
+
+| Item | Status |
+|---|---|
+| CRIT-2: Missing raster `BlogPosting.image` | ✅ Fixed — per-post OG JPGs in schema |
+| CRIT-3: SVG `Person.image` | ✅ Fixed — headshot.jpg (400×400) in schema |
+| HIGH-1: Blog post URLs missing from llms.txt | ✅ Fixed — per-post links + stat summaries added |
+| MED-4: No `<lastmod>` in sitemap | ✅ Fixed — serialize function in astro.config.mjs |
+| Markdown endpoints for blog posts | ✅ New — `/blog/[slug].md` static routes + `<link rel="alternate">` |
+| Responsive hero images | ✅ New — AVIF+WebP+JPG `<Picture />` on all blog posts + about page |
+| `og:image` relative path regression | 🔴 New regression — absolute URL fix required |
 
 ---
 
 ## Critical Issues (Fix Immediately)
 
-### CRIT-1: Duplicate JSON-LD on Every Blog Post Page
+### CRIT-1: `og:image` Emitting Relative URL — Social/AI Crawlers Fail to Load
+
+**Pages affected:** All 3 blog posts (and any page with a non-default OG image going forward)
+
+When `ogImage="/og-ditching-react.jpg"` is passed to `BaseHead.astro`, the rendered meta tag is:
+
+```html
+<meta property="og:image" content="/og-ditching-react.jpg">
+```
+
+The Open Graph protocol requires an **absolute URL**. Social crawlers (Open Graph, Twitter Card), Perplexity, ChatGPT, and Google's rich result parser all require `https://domain.com/path` — relative paths are treated as invalid or silently dropped. The hero images added this session are invisible to every consumer of og:image.
+
+**Fix in `src/components/BaseHead.astro`:**
+```ts
+const absoluteOgImage = ogImage?.startsWith('/')
+  ? `${siteUrl}${ogImage.slice(1)}`
+  : (ogImage ?? `${siteUrl}og-default.jpg`);
+```
+Then use `absoluteOgImage` in the meta tags. (Note: `siteUrl` already has a trailing slash in the existing code, so `ogImage.slice(1)` strips the leading `/`.)
+
+### CRIT-2: Duplicate JSON-LD on Every Blog Post Page
 
 **Pages affected:** All 3 blog posts
 
-Blog post pages emit two separate `<script type="application/ld+json">` blocks. The `WebSite` and `Person` schemas are injected twice — once from `BaseLayout.astro` and again from `BlogLayout.astro`. This creates identical `@id` collisions:
+Blog post pages emit two separate `<script type="application/ld+json">` blocks. The `WebSite` and `Person` schemas are injected twice — once from `BaseLayout.astro` and again from `BlogLayout.astro`. Both `"@id": "https://elaravoss.dev/#website"` and `"@id": "https://elaravoss.dev/#person"` appear twice. Some AI parsers flag `@id` collisions as invalid and discard the entire graph. Every blog post is emitting ~3kb of redundant JSON-LD.
 
-```
-Block 1 (BaseLayout): WebSite, Person, SearchAction
-Block 2 (BlogLayout): WebSite, Person, SearchAction, BlogPosting, BreadcrumbList
-```
+**Fix:** `BlogLayout.astro` already passes `suppressBaseSchema={true}` to `BaseLayout`. Verify that `BaseLayout` actually gates its `StructuredData` render on this prop — if the duplicate still appears in `view-source`, the prop is being passed but not checked.
 
-Both `"@id": "https://elaravoss.dev/#website"` and `"@id": "https://elaravoss.dev/#person"` appear twice. Google's parser likely deduplicates via `@id`, but some AI parsers flag this as invalid and may discard the entire graph. Every blog post is emitting ~3kb of redundant JSON-LD.
+### CRIT-3: elaravoss.dev Domain Not Connected
 
-**Fix:** Pass a `suppressBaseSchema` prop from `BlogLayout` to `BaseLayout`. When `true`, `BaseLayout` should skip rendering its `StructuredData` component. `BlogLayout` then emits the full unified graph (WebSite + Person + BlogPosting + BreadcrumbList) in a single `<script>` block.
+All canonical URLs, sitemap, structured data `@id` values, and `llms.txt` links point to `elaravoss.dev` which does not resolve. The canonical chain is broken: Google's parser discovers `<link rel="canonical" href="https://elaravoss.dev/...">` but cannot fetch the canonical URL. Google Search Console cannot be registered, and AI citations generated against the staging domain will not transfer to the real domain.
 
-### CRIT-2: Missing `image` Property on All BlogPosting Schemas
-
-**Pages affected:** All 3 blog posts
-
-Google requires a raster image (`ImageObject` with `url`, `width`, `height`) on `Article`/`BlogPosting` schema for rich result eligibility. The current schema has no `image` property at all. This means all three blog posts are ineligible for Article rich results in Google Search, regardless of content quality.
-
-**Fix:** Add an `image` property to the `BlogPosting` schema with a per-post OG image URL (JPEG/PNG, 1200×630px).
-
-### CRIT-3: SVG Used for `Person.image` — Raster Required
-
-**Pages affected:** All pages
-
-`Person.image` currently points to `https://elaravoss.dev/og-default.svg`. Google does not accept SVG files for rich result image eligibility. A JPEG or PNG headshot is required.
-
-**Fix:** Create a `headshot.jpg` (minimum 400×400px) and update `Person.image` to reference it.
+**Fix:** Connect `elaravoss.dev` in the Cloudflare Pages dashboard → Custom Domains. Register in Google Search Console and submit sitemap immediately after. Add `msvalidate.01` meta tag and register in Bing Webmaster Tools.
 
 ---
 
 ## High Priority Issues
 
-### HIGH-1: Blog Post URLs Missing from llms.txt
+### HIGH-1: `BlogPosting.publisher` Node Type Error
 
-The three blog articles contain the site's best citation-grade content (specific metrics, ROI figures, benchmarks), but `/llms.txt` only lists blog *topics* — it does not link to individual posts. An AI model reading only `llms.txt` cannot discover the 380kb→14kb JS bundle reduction, the $1.77M/year design system ROI, or the INP 380ms→95ms improvement.
+`publisher` in `BlogPosting` currently references `{ "@id": "https://elaravoss.dev/#website" }`. Schema.org requires `publisher` to be an `Organization` or `Person` — not a `WebSite`. The `@id` reference resolves to the wrong node type, causing a schema validation error.
 
-**Fix:** Add each blog post as a markdown link with a one-sentence stat summary to the Blog section of `llms.txt`.
+**Fix in `StructuredData.astro`:**
+```json
+"publisher": {
+  "@type": "Person",
+  "@id": "https://elaravoss.dev/#person"
+}
+```
 
-### HIGH-2: No `/llms-full.txt` Companion File
+### HIGH-2: `speakable` CSS Selector Too Broad
 
-The llms.txt spec recommends a full-text companion at `/llms-full.txt` containing the complete site corpus. Its absence means AI models relying on the llms.txt endpoint get a summary rather than the full content. This is the single highest-leverage llms.txt improvement available.
+The `SpeakableSpecification` on blog posts uses `cssSelector: "p:first-of-type"`. This matches the first `<p>` in every element on the page, not just the article intro. The correct selector is `.prose p:first-of-type` (scoped to the article container).
 
-**Fix:** Create `/public/llms-full.txt` containing the full text of all three blog posts and the Services FAQ.
+**Fix in `StructuredData.astro`:** Change `"p:first-of-type"` to `".prose p:first-of-type"`.
 
-### HIGH-3: `dateModified` Identical to `datePublished` on All Posts
+### HIGH-3: No `/llms-full.txt` Companion File
 
-All three `BlogPosting` schemas set `dateModified` equal to `datePublished`. This signals to parsers that no article has ever been updated, which is both inaccurate and a missed freshness signal for AI systems that prefer recently-maintained content.
+`/llms.txt` now links to all blog posts and their `.md` endpoints — a significant improvement. The next step per the llms.txt spec is `/llms-full.txt`: a single document containing the full text of all key pages (all three blog posts + the services FAQ). AI models that fetch `llms-full.txt` get the complete corpus in one request without following individual links.
 
-**Fix:** Update `dateModified` to reflect the actual last-edit date, and add an `updatedDate` field to the blog frontmatter schema so it can be maintained going forward.
+**Fix:** Create `public/llms-full.txt` with the full Markdown content of all three blog posts and the services page FAQ section. Link it from `llms.txt`.
 
-### HIGH-4: No External Citations in Any Blog Post
+### HIGH-4: `dateModified` Identical to `datePublished` on All Posts
 
-All factual claims are asserted without links to primary sources. The Core Web Vitals post references Google's 2021 CWV ranking signal without linking to Google Search Central. The design system post references conversion rate correlation data without a source. The Astro post makes technical claims about bundle sizes with no linked evidence.
+All three `BlogPosting` schemas set `dateModified` equal to `datePublished`. This signals to parsers that no article has ever been updated — a missed freshness signal.
 
-This weakens trustworthiness scores, creates a self-referential content graph (the only outbound link is to astro.build in the footer), and reduces the probability that AI systems treat the content as a citeable reference rather than unverified assertion.
+**Fix:** Add an `updatedDate` field to blog post frontmatter and pass it through to `StructuredData`. Use the current ISO date as the initial value now that images and markdown endpoints have been added.
 
-**Fix:** Add 2-4 external citations per blog post linking to primary sources (web.dev, Google Search Central, MDN, official docs).
+### HIGH-5: No External Citations in Any Blog Post
 
-### HIGH-5: No Privacy Policy Page
+All factual claims are asserted without links to primary sources. This weakens trustworthiness scores and reduces AI citation probability (unverifiable assertions are less likely to be cited than sourced claims).
 
-The site is an Amsterdam-based services-for-hire business collecting email inquiries. Under GDPR, a privacy policy is legally required. Its absence also reduces trust scores for AI systems evaluating site credibility.
+**Fix:** Add 2-4 external citations per blog post linking to `web.dev`, Google Search Central, MDN, or official docs. The CWV post should link to the CWV ranking signal announcement; the Astro post should link to Astro's own performance benchmarks.
 
-**Fix:** Add `/privacy/` page and link it in the footer alongside copyright.
+### HIGH-6: No Privacy Policy Page
 
-### HIGH-6: Canonical Domain Not Yet Connected
+Amsterdam-based services business collecting email inquiries — GDPR requires a privacy policy. Its absence also signals incomplete site structure to AI trust evaluators.
 
-Canonical tags, sitemap URLs, and structured data `@id` values all point to `elaravoss.dev`, but the custom domain is not yet connected to Cloudflare Pages. Until it is, the canonical chain is broken (canonicals point to URLs that don't resolve), Google Search Console cannot be registered, and any AI citations generated now will reference the staging domain.
-
-**Fix:** Connect the custom domain in the Cloudflare Pages dashboard and configure DNS. Register in Google Search Console and Bing Webmaster Tools immediately after.
+**Fix:** Add `/privacy/` page linked from the footer.
 
 ---
 
@@ -108,221 +127,181 @@ Canonical tags, sitemap URLs, and structured data `@id` values all point to `ela
 
 ### MED-1: Missing FAQPage Schema on /services/
 
-The Services page has a clearly structured "Frequently Asked Questions" section with 4 Q&A pairs. No `FAQPage` schema is present. While FAQPage rich results are now restricted for most sites, the semantic schema still benefits AI models parsing the page for service queries.
+The Services page has a clearly structured FAQ section with 4 Q&A pairs. No `FAQPage` schema is present.
 
-**Fix:** Add `FAQPage`/`Question`/`acceptedAnswer` JSON-LD to the services page graph.
+**Fix:** Add `FAQPage`/`Question`/`acceptedAnswer` JSON-LD to the services page.
 
-### MED-2: `speakable` Schema Missing on All Pages
+### MED-2: OAI-SearchBot and ChatGPT-User Not Explicitly in robots.txt
 
-`SpeakableSpecification` directly signals to AI assistants which content blocks are optimized for extraction and citation. Not present on any page.
+The wildcard `User-agent: *` covers these agents but explicit listing signals active GEO intent. OpenAI separates `GPTBot` (training) from `OAI-SearchBot` (live search retrieval) and `ChatGPT-User` (browsing mode).
 
-**Fix:** Add a `speakable` property to the homepage and blog post schemas pointing to `h1` and intro paragraph CSS selectors.
+**Fix:** Add explicit `Allow: /` entries for both agents.
 
-### MED-3: OAI-SearchBot and ChatGPT-User Not in robots.txt
+### MED-3: No Contextual Internal Links Between Posts
 
-The wildcard `User-agent: *` covers these agents but explicit listing is best practice and signals active GEO intent. OpenAI separates `GPTBot` (training) from `OAI-SearchBot` (live search retrieval) and `ChatGPT-User` (browsing mode).
+Blog posts cover overlapping topics but have zero contextual cross-links. Internal links directly improve AI graph traversal of the site.
 
-**Fix:** Add explicit entries for `OAI-SearchBot` and `ChatGPT-User` to `robots.txt`.
+**Fix:** Add 1-2 contextual links per post to related posts and to Work/Services pages.
 
-### MED-4: No `<lastmod>` Dates in Sitemap
+### MED-4: Blog Content Is 14+ Months Old
 
-The sitemap contains no `<lastmod>` elements, removing crawl scheduling hints for all 8 pages.
+The last post was March 2025. As of May 2026 all content is 14-16 months old. Perplexity's freshness threshold is approximately 12 months.
 
-**Fix:** Configure `@astrojs/sitemap` to populate `<lastmod>` from post `pubDate` for blog pages and the current build date for static pages.
+**Fix:** Publish a new post dated 2026. Add "Last updated: May 2026" markers to `/about/` and `/services/`.
 
-### MED-5: No Contextual Internal Links Between Posts
+### MED-5: No Testimonials or Social Proof
 
-Blog posts cover overlapping topics (performance is referenced in the Astro post and the CWV post; design systems in both the Meridian project and the DS article) but there are zero contextual cross-links. The only internal links are navigation links.
+Services page has no client quotes or review markup. Third-party validation is a significant trust signal for AI systems evaluating whether to recommend a service provider.
 
-**Fix:** Add 1-2 contextual links per blog post to related posts and relevant Work/Services pages.
+**Fix:** Add 1-2 anonymized testimonials (by role: "Engineering Manager, Series B fintech").
 
-### MED-6: Blog Content Is 14+ Months Old
+### MED-6: Sitemap `lastmod` Using Build Time, Not Content Date
 
-The last post was published March 2025. As of the audit date (May 2026), all content is 14-16 months old. Perplexity's freshness threshold is approximately 12 months. The site has no update cadence visible to crawlers.
+The `serialize` function in `astro.config.mjs` sets `item.lastmod = new Date().toISOString()` on every page. This is accurate for static pages but misleading for blog posts — all three posts will report the same `lastmod` as the homepage, regardless of when they were actually written.
 
-**Fix:** Publish a new post dated 2026. Add "Last updated" markers to the About and Services pages.
-
-### MED-7: No Testimonials or Social Proof
-
-The Services page describes deliverables in detail but provides zero social proof. No client quotes, no project references, no review markup. For AI systems evaluating whether to recommend a service provider, third-party validation is a significant trust signal.
-
-**Fix:** Add 1-2 testimonials (even anonymized by role: "Engineering Manager, Series B fintech") to the Services page.
-
-### MED-8: HSTS Header Not Confirmed
-
-The `_headers` file does not include `Strict-Transport-Security`. Cloudflare may inject it at the zone level, but this should be verified and explicitly set.
-
-**Fix:** Add `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` to `_headers` under `/*`.
+**Fix:** In the serialize function, check `item.url` for blog post paths and derive `lastmod` from the post's `pubDate` or `updatedDate` frontmatter. Import the content collection or use a build-time date map.
 
 ---
 
 ## Low Priority Issues
 
 ### LOW-1: `SearchAction` Using Deprecated `EntryPoint` Wrapper
-
-Current schema wraps the SearchAction `target` in an `EntryPoint` object. Google's current preferred syntax is a plain URL string.
+Current schema wraps the `SearchAction` target in an `EntryPoint` object. Google's current preferred syntax is a plain URL string with `{search_term_string}` template.
 
 ### LOW-2: `Person.description` Missing
-
-The Person schema has `jobTitle` but no `description` bio. A 1-2 sentence bio improves entity completeness.
+`Person` schema has `jobTitle` but no `description`. A 1-2 sentence bio improves entity completeness.
 
 ### LOW-3: No `keywords`/`articleSection` on BlogPosting
-
-Blog post tags (Astro, React, Performance, etc.) are visible in the UI but not emitted in schema.
+Post tags visible in the UI are not emitted in schema.
 
 ### LOW-4: Twitter/X URL Uses Legacy Domain
-
-`sameAs` references `twitter.com` — should be `x.com` for current canonical.
+`sameAs` references `twitter.com` — should be `x.com`.
 
 ### LOW-5: No Per-Page WebPage Schema
-
-Pages like `/about/`, `/work/`, and `/services/` have no `WebPage` node with their own `@id`, `name`, and `isPartOf` references.
+Pages `/about/`, `/work/`, `/services/` have no `WebPage` node with `@id`, `name`, and `isPartOf`.
 
 ### LOW-6: No IndexNow for Bing
-
-Bing-specific indexing acceleration via IndexNow is not implemented. A Cloudflare Pages deployment hook could ping IndexNow on each deploy.
-
-### LOW-7: Per-Article OG Images
-
-All pages share the same `og-default.svg` fallback. Individual OG images per blog post improve social preview richness and AI content signal quality.
+Bing indexing acceleration via IndexNow is not implemented.
 
 ---
 
 ## Category Deep Dives
 
-### AI Citability (79/100)
+### AI Citability (88/100, was 79)
 
-**Strongest:** The blog posts are the site's GEO asset. Citation-grade passages:
+**What improved:** The `llms.txt` additions are the primary driver — all three blog posts are now directly linked with one-sentence stat summaries, meaning an AI model reading only `/llms.txt` immediately surfaces the $1.77M/year design system ROI, the 380kb→14kb JS bundle reduction, and the INP 380ms→95ms improvement. The Markdown endpoints (`/blog/[slug].md`) and `<link rel="alternate" type="text/markdown">` give crawlers a clean, frontmatter-stripped, citation-ready version of each post. Combined these are the two highest-citability improvements available without adding new content.
 
-| Content Block | Score | Why |
-|---|---|---|
-| Meridian: "40 hrs/week, 65 engineers, 12 products, $1.77M/yr" | 85/100 | 4 distinct data points, original research, complete in isolation |
-| Lumino: "Lighthouse 54→100, organic impressions +34%, €50M ARR" | 84/100 | Business revenue context is rare and anchoring |
-| Vela: "sub-16ms frames at 50,000 updates/sec" | 80/100 | Hard benchmarks, technology-specific |
-| Performance Consulting: scope + €2,500 + 5-day turnaround | 80/100 | Answers "what does a CWV audit cost?" in one pass |
+**Remaining ceiling:** Homepage project cards still present statistics in compressed single-line form. The cards should grow to 3-4 sentence blocks with causal reasoning.
 
-**Weakest:** Homepage project cards present the same statistics in single-line compressed form without the surrounding narrative that makes AI models confident citing them. The cards should grow to 3-4 sentence blocks with causal reasoning, not just outcomes.
+### Brand Authority (22/100, unchanged)
 
-### Brand Authority (22/100)
+The structural ceiling for a fictional persona. Wikipedia, Wikidata, Reddit, YouTube — none are present. For a real deployment, brand authority is built entirely off-site.
 
-The structural ceiling for a fictional persona. AI models use Wikipedia, Wikidata, Reddit, and YouTube for entity verification — none are present. The schema `sameAs` links are correctly implemented and point to appropriate platforms, but the profiles don't exist. For a real deployment, brand authority is built entirely off-site: guest posts, conference talks, podcast appearances, Reddit/HN participation, and a Wikidata entry.
-
-### Content E-E-A-T (64/100)
+### Content E-E-A-T (65/100, was 64)
 
 | Dimension | Score | Bottleneck |
 |---|---|---|
 | Experience | 20/25 | Strong first-person metrics; no client names or visual evidence |
-| Expertise | 18/25 | Technical accuracy is current and correct; no verifiable credentials |
-| Authoritativeness | 12/25 | Self-contained content graph; no inbound citations; no testimonials |
-| Trustworthiness | 14/25 | HTTPS, contact email, pricing transparency — undercut by zero external citations |
+| Expertise | 18/25 | Technical accuracy correct; no verifiable external credentials |
+| Authoritativeness | 13/25 | Self-contained graph; no inbound citations; no testimonials |
+| Trustworthiness | 14/25 | HTTPS, pricing transparency — still no external citations |
 
-The technical content is accurate and current (correct INP/FID transition, correct `scheduler.yield()` API, correct AVIF/WebP guidance). The expertise signals would score higher with verifiable external credentials. The biggest E-E-A-T lever is adding external citations to blog posts — a direct fix for the trustworthiness gap.
+Marginal bump from the richer image attribution (blog hero images signal more invested authorship). The biggest lever remains external citations in blog posts.
 
-### Technical GEO (91/100)
+### Technical GEO (97/100, was 91)
 
-This is the site's standout dimension and reflects genuine best-practice implementation:
+**What improved:**
+- Markdown endpoints (`/blog/[slug].md`) with proper `Content-Type: text/markdown; charset=utf-8` — AI crawlers get structured Markdown without HTML parsing overhead
+- `<link rel="alternate" type="text/markdown">` auto-discovery in every blog post `<head>`
+- Sitemap `<lastmod>` now populated on every page
+- llms.txt Markdown URL references enable direct content access for models that follow them
 
-- Astro 6 SSG → complete HTML in initial response, nothing gated behind JS
-- Cloudflare Pages edge CDN → minimum TTFB, maximum availability
-- All 8 major AI crawlers explicitly allowed by name in robots.txt
-- `llms.txt` present and structured
-- Full meta tag implementation: canonical, sitemap link, RSS alternate, OG, Twitter cards, author, robots max-snippet
-- Content-addressed asset cache (1 year, immutable) + appropriate TTLs for feeds
-- Zero raster images → zero CLS risk, zero LCP image optimization concerns
-- System font stack → zero FOIT/FOUT
+**Remaining 3-point gap:** Sitemap lastmod not derived from content dates (build time only), broken canonical chain (custom domain not connected), and no IndexNow integration.
 
-The 9-point gap: no `<lastmod>` in sitemap, HSTS not confirmed, and the temporary broken canonical chain (staging domain active, custom domain not yet connected).
+### Schema & Structured Data (72/100, was 47)
 
-### Schema & Structured Data (47/100)
+**What improved (25-point gain):** The two critical blocking issues are resolved. `BlogPosting.image` now has per-post `ImageObject` with correct `url`/`width`/`height` (raster JPEG, 1200×630). `Person.image` now references `headshot.jpg` (400×400 JPEG) — eligible for Google's rich result parser. These two fixes alone unlock Article rich result eligibility for all three blog posts.
 
-| Dimension | Score |
-|---|---|
-| Completeness | 44/100 |
-| Validity | 72/100 |
-| GEO-Critical Opportunities | 35/100 |
+**Remaining gaps:** Duplicate JSON-LD (CRIT-2), `publisher` node type error (HIGH-1), `speakable` CSS selector (HIGH-2), missing FAQPage on services, no per-page WebPage nodes, missing `description` on Person.
 
-The duplicate JSON-LD bug, missing `image` on BlogPosting, and SVG `Person.image` are the primary validity gaps. The opportunity gap is FAQPage (services page), `speakable` (all pages), per-project `CreativeWork` (work page), and `WebPage` per-page identity nodes. The correct schema types are being used — the implementation needs hardening.
+### Platform Optimization (60/100, was 54)
 
-### Platform Optimization (54/100)
-
-| Platform | Score | Primary Gap |
-|---|---|---|
-| Google AI Overviews | 62/100 | No question-based H2 headings; missing FAQPage schema |
-| Bing Copilot | 58/100 | No IndexNow; no Bing Webmaster Tools verification |
-| Google Gemini | 55/100 | No YouTube presence; no Knowledge Graph entry |
-| Perplexity AI | 51/100 | Content 14+ months old; no Reddit/forum presence |
-| ChatGPT Web Search | 44/100 | No entity corroboration outside the site |
+| Platform | Score | Change | Primary Remaining Gap |
+|---|---|---|---|
+| Google AI Overviews | 68/100 | +6 | No question-based H2 headings; FAQPage schema missing |
+| Bing Copilot | 63/100 | +5 | No IndexNow; no Bing Webmaster Tools |
+| Google Gemini | 60/100 | +5 | No YouTube; no Knowledge Graph entry |
+| Perplexity AI | 56/100 | +5 | Content 14+ months old; no forum presence |
+| ChatGPT Web Search | 52/100 | +8 | Markdown endpoints help; entity corroboration still off-site only |
 
 ---
 
 ## Quick Wins (Implement This Week)
 
-1. **Fix duplicate JSON-LD bug** — add `suppressBaseSchema` prop to BlogLayout → BaseLayout. No content work, pure code change. Affects schema validity score directly.
+1. **Fix `og:image` relative URL** — 3-line change in `BaseHead.astro`. Restores OG image functionality for all social crawlers and AI platforms. This is a regression; fix first.
 
-2. **Add blog post URLs + key stats to llms.txt** — 15 minutes of editing. Immediately surfaces the site's best citable content to AI models reading `/llms.txt`.
+2. **Fix `BlogPosting.publisher` type** — 2-line change in `StructuredData.astro`. Removes a schema validation error on all 3 blog posts.
 
-3. **Add FAQPage schema to /services/** — the Q&A content is already written. Encode 4 questions in JSON-LD. Benefits all AI platforms.
+3. **Fix `speakable` CSS selector** — 1-line change in `StructuredData.astro`. Scopes the speakable region correctly to the article prose container.
 
-4. **Add OAI-SearchBot and ChatGPT-User to robots.txt** — two-line addition. Closes the ChatGPT entity access gap.
+4. **Add FAQPage schema to /services/** — content is already written; encode 4 questions in JSON-LD. Lifts Google AI Overview eligibility.
 
-5. **Add HSTS and `<lastmod>` to sitemap** — one-line `_headers` change + sitemap config update. Improves security score and crawl freshness signals.
+5. **Add `dateModified` to blog post frontmatter** — set to today's date (May 2026) to reflect the hero image + Markdown endpoint additions. Resets freshness signals on all three posts.
 
-6. **Add description to Person schema and fix `dateModified`** — both are single-field additions to `StructuredData.astro`.
-
-7. **Add 2 external citations to each blog post** — links to web.dev, Google Search Central, MDN. Directly improves trustworthiness and creates outbound link graph.
+6. **Add OAI-SearchBot and ChatGPT-User to robots.txt** — two-line addition. Signals active GEO intent to OpenAI's search retrieval crawler.
 
 ---
 
 ## 30-Day Action Plan
 
-### Week 1: Schema & Technical Fixes
-- [ ] Fix duplicate JSON-LD on blog posts (BaseLayout suppressBaseSchema)
-- [ ] Add `image` property to BlogPosting schema (requires raster OG image per post)
-- [ ] Replace SVG `Person.image` with raster headshot
-- [ ] Fix `dateModified` ≠ `datePublished` on all blog posts
-- [ ] Add OAI-SearchBot, ChatGPT-User to robots.txt
-- [ ] Add `<lastmod>` to sitemap via @astrojs/sitemap config
-- [ ] Add HSTS to `_headers`
-- [ ] Add FAQPage schema to /services/
-- [ ] Add `speakable` to homepage and blog post schemas
-- [ ] Add `description` to Person schema
+### Week 1: Fix Regressions + Schema Hardening
+- [ ] Fix `og:image` relative URL bug in `BaseHead.astro` (CRIT-1)
+- [ ] Verify/fix duplicate JSON-LD on blog posts (CRIT-2)
+- [ ] Fix `BlogPosting.publisher` node type (HIGH-1)
+- [ ] Fix `speakable` CSS selector to `.prose p:first-of-type` (HIGH-2)
+- [ ] Update `dateModified` on all 3 blog posts to 2026-05-07
+- [ ] Add FAQPage schema to /services/ (MED-1)
+- [ ] Add OAI-SearchBot and ChatGPT-User to robots.txt (MED-2)
+- [ ] Add `description` to Person schema (LOW-2)
 
 ### Week 2: Content & llms.txt
-- [ ] Add blog post URLs with key stats to llms.txt
-- [ ] Create /public/llms-full.txt with full blog post text + services FAQ
-- [ ] Add 2-4 external citations to each blog post
-- [ ] Add contextual internal links between blog posts and to Work/Services pages
-- [ ] Add "Last updated: [date]" markers to /about/ and /services/
+- [ ] Create /public/llms-full.txt with full blog post text + services FAQ (HIGH-3)
+- [ ] Add 2-4 external citations to each blog post (HIGH-5)
+- [ ] Add contextual internal links between posts and to Work/Services (MED-3)
+- [ ] Add "Last updated: May 2026" markers to /about/ and /services/ (MED-4)
+- [ ] Fix sitemap lastmod to use content dates rather than build time (MED-6)
 
 ### Week 3: Domain & Indexing
-- [ ] Connect elaravoss.dev custom domain to Cloudflare Pages
-- [ ] Register elaravoss.dev in Google Search Console; submit sitemap
-- [ ] Add msvalidate.01 meta tag; register in Bing Webmaster Tools; submit sitemap
-- [ ] Implement IndexNow (Cloudflare Pages deploy hook → api.indexnow.org)
-- [ ] Add privacy policy page (/privacy/) linked from footer
+- [ ] Connect elaravoss.dev custom domain to Cloudflare Pages (CRIT-3)
+- [ ] Register in Google Search Console; submit sitemap
+- [ ] Add msvalidate.01 meta; register in Bing Webmaster Tools; submit sitemap
+- [ ] Implement IndexNow (Cloudflare Pages deploy hook) (LOW-6)
+- [ ] Add privacy policy page /privacy/ (HIGH-6)
 
 ### Week 4: Content & Social Proof
-- [ ] Publish a new blog post (2026 date) to reset freshness signals
-- [ ] Add 1-2 testimonials to Services page (anonymized by role if needed)
-- [ ] Add question-based H2 headings to at least 2 blog posts with 40-word direct-answer openers
-- [ ] Add `keywords`, `articleSection`, `wordCount` to BlogPosting schemas
-- [ ] Create /llms-full.txt if not done in Week 2
+- [ ] Publish a new 2026-dated blog post (MED-4)
+- [ ] Add 1-2 testimonials to Services page (MED-5)
+- [ ] Add question-based H2 headings to 2 blog posts with 40-word direct-answer openers
+- [ ] Add `keywords`, `articleSection`, `wordCount` to BlogPosting schemas (LOW-3)
+- [ ] Create per-page WebPage schema for /about/, /work/, /services/ (LOW-5)
 
 ---
 
 ## Appendix: Pages Analyzed
 
-| URL | Title | Key Issues |
-|---|---|---|
-| / | Elara Voss — Senior Frontend Engineer | Homepage project cards under-developed as citable blocks |
-| /about/ | About Elara Voss | No WebPage schema; no external credential links |
-| /work/ | Work — Elara Voss | No project-level CreativeWork schema; card descriptions too short |
-| /services/ | Services — Elara Voss | Missing FAQPage schema; no testimonials; no privacy policy link |
-| /blog/ | Blog — Elara Voss | Content 14+ months old |
-| /blog/ditching-react-for-astro/ | Why I Ditched React for Astro | Duplicate JSON-LD; missing BlogPosting image; no external citations |
-| /blog/design-system-that-saved-40-hours/ | The Design System… | Duplicate JSON-LD; missing BlogPosting image; no external citations |
-| /blog/core-web-vitals-practical-guide/ | Core Web Vitals… | Duplicate JSON-LD; missing BlogPosting image; no external citations |
+| URL | Title | Session Changes | Remaining Issues |
+|---|---|---|---|
+| / | Elara Voss — Senior Frontend Engineer | — | Project cards lack citable narrative depth |
+| /about/ | About Elara Voss | Profile photo (Picture component) | No WebPage schema; no external credential links |
+| /work/ | Work — Elara Voss | — | No CreativeWork schema; card descriptions short |
+| /services/ | Services — Elara Voss | — | No FAQPage schema; no testimonials; no privacy link |
+| /blog/ | Blog — Elara Voss | — | Content 14+ months old |
+| /blog/ditching-react-for-astro/ | Why I Ditched React for Astro | Hero image, OG image in schema, .md endpoint | og:image relative URL; duplicate JSON-LD; no citations |
+| /blog/design-system-that-saved-40-hours/ | The Design System… | Hero image, OG image in schema, .md endpoint | og:image relative URL; duplicate JSON-LD; no citations |
+| /blog/core-web-vitals-practical-guide/ | Core Web Vitals… | Hero image, OG image in schema, .md endpoint | og:image relative URL; duplicate JSON-LD; no citations |
+| /blog/ditching-react-for-astro.md | Markdown endpoint | New this session | Served correctly; no issues |
 
 ---
 
-*Generated by GEO Audit on 2026-05-06 · Site: astro-demo-elara-voss.pages.dev · Canonical: elaravoss.dev*
+*Generated by GEO Audit on 2026-05-07 · Site: astro-demo-elara-voss.pages.dev · Canonical: elaravoss.dev*
+*Previous audit: 2026-05-06 · Previous score: 61/100 · Delta: +6*

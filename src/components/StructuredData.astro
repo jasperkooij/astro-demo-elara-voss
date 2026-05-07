@@ -99,7 +99,7 @@ if (type === 'blogposting' && title && description && pubDate) {
       '@id': personId,
       name: author,
     },
-    publisher: { '@id': websiteId },
+    publisher: { '@type': 'Person', '@id': personId },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': pageUrl,
@@ -115,7 +115,7 @@ if (type === 'blogposting' && title && description && pubDate) {
     articleSection: tags[0] ?? 'Frontend Engineering',
     speakable: {
       '@type': 'SpeakableSpecification',
-      cssSelector: ['h1', 'p:first-of-type'],
+      cssSelector: ['h1', '.prose p:first-of-type'],
     },
   });
 
