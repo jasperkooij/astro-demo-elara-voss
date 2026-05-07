@@ -17,6 +17,8 @@ interface Props {
 
 const { title, description, pubDate, updatedDate, author, tags, ogImage, heroImage } = Astro.props;
 
+const mdHref = Astro.url.pathname.replace(/\/$/, '') + '.md';
+
 const formattedDate = pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -31,6 +33,7 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
   ogImage={ogImage}
   suppressBaseSchema={true}
 >
+  <link slot="head" rel="alternate" type="text/markdown" href={mdHref} />
   <StructuredData
     slot="head"
     type="blogposting"

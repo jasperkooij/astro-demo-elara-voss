@@ -18,11 +18,11 @@ Elara offers the following professional services to product teams, startups, and
 
 ## Blog
 
-Recent technical articles:
+Recent technical articles (append `.md` to any post URL for the raw Markdown version):
 
-- [Why I Ditched React for Astro (And Never Looked Back)](https://elaravoss.dev/blog/ditching-react-for-astro/) — Lighthouse 54→100, JS bundle 380kb→14kb, LCP 4.1s→1.2s, organic search up 34% after switching a SaaS marketing site from React/Next.js to Astro.
-- [The Design System That Saved Our Team 40 Hours Per Week](https://elaravoss.dev/blog/design-system-that-saved-40-hours/) — How the Meridian design system reduced UI-related engineering time by 4.4 hrs/engineer/week across 65 engineers and 12 products — saving $1.77M/year.
-- [Core Web Vitals Aren't Optional: A Practical Guide for 2025](https://elaravoss.dev/blog/core-web-vitals-practical-guide/) — LCP, CLS, INP explained with code fixes. Real case study: LCP 4.8s→1.4s, CLS 0.28→0.03, INP 380ms→95ms; organic impressions up 22%, conversion up 8%.
+- [Why I Ditched React for Astro (And Never Looked Back)](https://elaravoss.dev/blog/ditching-react-for-astro/) — Lighthouse 54→100, JS bundle 380kb→14kb, LCP 4.1s→1.2s, organic search up 34% after switching a SaaS marketing site from React/Next.js to Astro. Markdown: https://elaravoss.dev/blog/ditching-react-for-astro.md
+- [The Design System That Saved Our Team 40 Hours Per Week](https://elaravoss.dev/blog/design-system-that-saved-40-hours/) — How the Meridian design system reduced UI-related engineering time by 4.4 hrs/engineer/week across 65 engineers and 12 products — saving $1.77M/year. Markdown: https://elaravoss.dev/blog/design-system-that-saved-40-hours.md
+- [Core Web Vitals Aren't Optional: A Practical Guide for 2025](https://elaravoss.dev/blog/core-web-vitals-practical-guide/) — LCP, CLS, INP explained with code fixes. Real case study: LCP 4.8s→1.4s, CLS 0.28→0.03, INP 380ms→95ms; organic impressions up 22%, conversion up 8%. Markdown: https://elaravoss.dev/blog/core-web-vitals-practical-guide.md
 
 Topics covered:
 
