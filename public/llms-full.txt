@@ -1,0 +1,135 @@
+# Elara Voss — Senior Frontend Engineer & Design Systems Architect
+
+> Full-text portfolio corpus. For a summary index see /llms.txt.
+
+---
+
+## About Elara Voss
+
+Elara Voss is a Senior Frontend Engineer and Design Systems Architect with 8 years of professional experience. She is based in Amsterdam, Netherlands and holds a BSc in Computer Science from TU Delft (2018).
+
+She specialises in Astro, React, TypeScript, design system architecture, Core Web Vitals optimisation, and web performance engineering. She is the lead architect of Meridian — a design system powering 12 products across a fintech company — and has led frontend migrations and performance audits for SaaS, e-commerce, and media clients across Europe.
+
+**Contact:** hello@elaravoss.dev
+**GitHub:** https://github.com/elaravoss
+**Twitter/X:** https://x.com/elaravoss
+**LinkedIn:** https://linkedin.com/in/elaravoss
+
+---
+
+## Services
+
+### Frontend Development — From €8,000/project
+
+Bespoke frontend builds with Astro or React — performance-first, accessible by default, and maintainable by your team after handoff.
+
+Deliverables include: architecture scoping and technology recommendation, component-driven development with Storybook, Core Web Vitals optimisation (target: 100/100 Lighthouse), WCAG 2.2 AA accessibility compliance, TypeScript throughout with test coverage, and handoff documentation with onboarding session.
+
+### Design Systems Architecture — From €12,000/engagement
+
+End-to-end design system strategy and build — from token architecture and component API design to Storybook setup and team adoption.
+
+Deliverables include: design token audit and three-tier token architecture, component library with variants/states/documentation, Figma variable sync with code tokens, automated visual regression with Chromatic, contribution guidelines and governance model, and team workshops and onboarding programme.
+
+### Performance Consulting — From €2,500/audit
+
+Comprehensive Core Web Vitals audit with a prioritised fix plan — and optional implementation support.
+
+Deliverables include: Lighthouse and CrUX real-user data analysis, LCP/CLS/INP root cause identification, prioritised fix plan with effort/impact estimates, implementation of high-impact fixes (optional), monitoring setup with web-vitals.js and analytics, and a follow-up review 30 days post-implementation.
+
+### Frequently Asked Questions
+
+**How do I get started?**
+Send a brief description of your project via email. I respond within 48 hours with whether I am a good fit, and we will schedule a 30-minute scoping call from there.
+
+**Do you work with teams outside the Netherlands?**
+Yes — the majority of my clients are remote. I work across European time zones and am available for occasional travel for workshops or kick-offs.
+
+**What is your typical project timeline?**
+Frontend builds typically run 6–12 weeks depending on scope. Design system engagements are 10–16 weeks. Performance audits are delivered within 5 business days of access being granted.
+
+**Do you offer retainer arrangements?**
+For ongoing design system maintenance and evolution, yes — I offer monthly retainers for teams that have completed an initial engagement.
+
+---
+
+## Blog: Why I Ditched React for Astro (And Never Looked Back)
+
+*Published: 15 March 2025 · Tags: Astro, React, Performance, Frontend*
+*URL: https://elaravoss.dev/blog/ditching-react-for-astro/*
+
+Last year I did something that would have felt heretical to me three years ago: I convinced a client to let me rebuild their marketing site in Astro instead of the React + Next.js stack we'd been using for years. The brief was simple — their Core Web Vitals were terrible and organic search was suffering for it. Six months later, their Lighthouse Performance score went from 54 to 100.
+
+The site in question was a product marketing site for a SaaS company — about 40 pages, a blog, some interactive pricing tables. The React bundle was 380kb gzipped. The Time to First Byte was 1.8 seconds. The Total Blocking Time measured in the hundreds of milliseconds.
+
+Astro's core insight is deceptively simple: most websites are mostly static. Ship HTML. Only hydrate the JavaScript that actually needs to be interactive. The mental model is Island Architecture — your page is an ocean of static, server-rendered HTML and a few interactive islands are hydrated independently.
+
+The mechanism Astro uses to control hydration is client directives: client:load (hydrate immediately), client:idle (hydrate when browser is idle), client:visible (hydrate when scrolled into view). By default, an Astro component ships zero JavaScript. You opt in to interactivity.
+
+Results for the SaaS marketing site: Total JavaScript shipped went from 380kb to 14kb. LCP improved from 4.1s to 1.2s. The Lighthouse Performance score hit 100. Six weeks after launch, organic search impressions were up 34%.
+
+For content-heavy sites — marketing pages, portfolios, documentation, blogs — Astro is now my default. I reach for React when I need it, and I need it less often than I used to think.
+
+---
+
+## Blog: The Design System That Saved Our Team 40 Hours Per Week
+
+*Published: 8 February 2025 · Tags: Design Systems, TypeScript, React, Productivity*
+*URL: https://elaravoss.dev/blog/design-system-that-saved-40-hours/*
+
+In 2022, I joined a fintech company as their first dedicated frontend architect. They had twelve product teams, each building their own version of a button. Twelve distinct button implementations, with different hover states, different focus rings, different loading behaviors. The QA team had a spreadsheet tracking the inconsistencies.
+
+Eighteen months later, we had a design system called Meridian in production across all twelve products, and we had measured a consistent 40-hour-per-week reduction in engineering time previously spent on UI decisions, inconsistency fixes, and accessibility remediation.
+
+The token strategy: Primitive tokens are raw values with no semantic meaning (--color-blue-500: #3b82f6). Semantic tokens reference primitives and carry meaning (--color-action-primary: var(--color-blue-500)). Component tokens allow product-specific overrides. This three-layer structure is what makes a design system scale.
+
+Component API rules: No style props (use variants instead). Accessibility is not optional — every interactive component ships with ARIA by default. Composition over configuration. Explicit forward refs on every component.
+
+Storybook served as the source of truth for component contracts. Every component has stories for all variants, states, edge cases, and accessibility assertions. Chromatic integration provided automated visual regression — PR review time for component changes dropped from 3 days to 4 hours.
+
+Measuring impact: Before Meridian, engineers spent an average of 6.2 hours per week on UI-related work. After, 1.8 hours. That is a reduction of 4.4 hours across 65 engineers — 286 hours per week reclaimed. At $120/hour average fully-loaded cost, that is $1.77 million per year redirected to product work.
+
+---
+
+## Blog: Core Web Vitals Aren't Optional: A Practical Guide for 2025
+
+*Published: 22 January 2025 · Tags: Performance, Core Web Vitals, SEO, JavaScript*
+*URL: https://elaravoss.dev/blog/core-web-vitals-practical-guide/*
+
+Google's Core Web Vitals have been a ranking signal since 2021. Faster pages convert better — sites loading in 1 second convert 3x better than sites loading in 5 seconds.
+
+**LCP (Largest Contentful Paint) — Target: under 2.5 seconds. Good: under 1.2 seconds.**
+
+The single highest-impact change for image LCP elements: preload the LCP image with <link rel="preload" as="image" href="/hero.webp" fetchpriority="high"> and never use loading="lazy" on your LCP image. Serve images in WebP or AVIF format — AVIF is typically 30-50% smaller than WebP for equivalent quality.
+
+**CLS (Cumulative Layout Shift) — Target: under 0.1. Good: under 0.05.**
+
+Always specify width and height on img elements. Fix web font swapping with size-adjust, ascent-override, and descent-override in @font-face declarations. Pre-allocate space for dynamic content like cookie banners.
+
+**INP (Interaction to Next Paint) — Target: under 200ms. Good: under 100ms.**
+
+INP replaced FID in March 2024 and measures the full time from interaction to the next visual update. Break up long tasks with scheduler.yield() — yield control back to the browser every 50 items in a loop. Defer non-critical JavaScript with the defer attribute or dynamic import().
+
+**Real-world case study:**
+
+An e-commerce client had 68% of URLs with "Poor" CWV ratings. Problems: hero images not preloaded, product images lacking dimensions, a third-party chat widget loading synchronously in head, a heavy recommendation script on every page.
+
+After four weeks: LCP improved from 4.8s to 1.4s. CLS dropped from 0.28 to 0.03. INP dropped from 380ms to 95ms. Three months later: organic search impressions up 22%, conversion rate up 8%.
+
+---
+
+## Technical Stack
+
+This site is built with:
+- Astro 6 (static site generation, zero client-side JavaScript)
+- Tailwind CSS v4 (utility-first CSS with @theme directive)
+- TypeScript (strict mode throughout)
+- Cloudflare Pages (edge CDN, global distribution)
+- @astrojs/sitemap (automated sitemap generation)
+- @astrojs/rss (RSS feed for blog content)
+
+Lighthouse scores: Performance 100, SEO 100, Accessibility 100, Best Practices 100.
+
+---
+
+*Last updated: May 2026 · Sitemap: https://elaravoss.dev/sitemap-index.xml · RSS: https://elaravoss.dev/rss.xml*

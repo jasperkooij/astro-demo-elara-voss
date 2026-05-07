@@ -15,6 +15,62 @@
     "Liberation Mono", "Courier New", monospace;
 }
 
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-fade-up-d1 {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.animate-fade-up-d2 {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+.animate-fade-up-d3 {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease both;
+}
+.animate-slide-right {
+  animation: slide-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-up-d1,
+  .animate-fade-up-d2,
+  .animate-fade-up-d3,
+  .animate-fade-in,
+  .animate-slide-right,
+  .animate-pulse-glow {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @layer base {
   html {
     color-scheme: dark;

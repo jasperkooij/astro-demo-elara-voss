@@ -29,6 +29,12 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 # llms.txt: https://elaravoss.dev/llms.txt
 Sitemap: https://elaravoss.dev/sitemap-index.xml
 `;

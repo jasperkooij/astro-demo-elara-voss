@@ -3,33 +3,33 @@
 
 <section class="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 grid md:grid-cols-2 gap-12 items-center">
   <div>
-    <p class="text-accent text-sm font-mono tracking-wide mb-4 uppercase">
-      Senior Frontend Engineer
+    <p class="text-accent text-sm font-mono tracking-wide mb-4 uppercase animate-fade-up">
+      Senior Frontend Engineer · Amsterdam
     </p>
-    <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight mb-6">
+    <h1 class="text-4xl sm:text-5xl font-bold text-text leading-tight mb-6 animate-fade-up-d1">
       Building fast, accessible, design&#8209;led web experiences.
     </h1>
-    <p class="text-muted text-lg leading-relaxed mb-8">
+    <p class="text-muted text-lg leading-relaxed mb-8 animate-fade-up-d2 speakable">
       8 years crafting design systems, squeezing Lighthouse scores to 100, and
       making the web a little better — from Amsterdam.
     </p>
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-wrap gap-4 animate-fade-up-d3">
       <a
         href="/work/"
-        class="inline-flex items-center gap-2 bg-accent text-bg px-6 py-3 rounded-lg font-semibold text-sm hover:bg-accent/90 transition-colors"
+        class="inline-flex items-center gap-2 bg-accent text-bg px-6 py-3 rounded-lg font-semibold text-sm hover:bg-accent/90 hover:-translate-y-px transition-all duration-150"
       >
         View my work
       </a>
       <a
         href="/about/"
-        class="inline-flex items-center gap-2 border border-border text-text px-6 py-3 rounded-lg font-semibold text-sm hover:border-accent/50 transition-colors"
+        class="inline-flex items-center gap-2 border border-border text-text px-6 py-3 rounded-lg font-semibold text-sm hover:border-accent/50 hover:-translate-y-px transition-all duration-150"
       >
         About me
       </a>
     </div>
   </div>
 
-  <div class="flex justify-center md:justify-end" aria-hidden="true">
+  <div class="flex justify-center md:justify-end animate-fade-in" aria-hidden="true">
     <div class="relative w-64 h-64 sm:w-80 sm:h-80">
       <svg
         viewBox="0 0 320 320"
@@ -41,6 +41,12 @@
       >
         <!-- Background circle -->
         <circle cx="160" cy="160" r="150" fill="#161b22" stroke="#30363d" stroke-width="1" />
+
+        <!-- Subtle grid pattern -->
+        <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#30363d" stroke-width="0.4" opacity="0.5"/>
+        </pattern>
+        <circle cx="160" cy="160" r="149" fill="url(#grid)" opacity="0.3" />
 
         <!-- Monitor / screen -->
         <rect x="80" y="90" width="160" height="100" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1.5" />
@@ -58,22 +64,25 @@
         <rect x="100" y="152" width="40" height="3" rx="1.5" fill="#8b949e" opacity="0.4" />
         <rect x="100" y="160" width="88" height="3" rx="1.5" fill="#58a6ff" opacity="0.4" />
 
-        <!-- Cursor blink -->
-        <rect x="192" y="112" width="2" height="12" rx="1" fill="#58a6ff" opacity="0.9" />
+        <!-- Cursor blink — animated via CSS -->
+        <rect x="192" y="112" width="2" height="12" rx="1" fill="#58a6ff" class="animate-pulse-glow" />
 
         <!-- Monitor stand -->
         <rect x="150" y="190" width="20" height="16" rx="2" fill="#30363d" />
         <rect x="130" y="204" width="60" height="4" rx="2" fill="#30363d" />
 
         <!-- Person silhouette -->
-        <!-- Head -->
         <circle cx="160" cy="248" r="18" fill="#21262d" stroke="#30363d" stroke-width="1" />
-        <!-- Hair highlight -->
         <path d="M145 242 Q160 228 175 242" stroke="#58a6ff" stroke-width="2" fill="none" opacity="0.4" />
-        <!-- Shoulders / torso -->
         <path d="M124 280 Q140 265 160 263 Q180 265 196 280 L200 300 H120 Z" fill="#21262d" />
-        <!-- Collar accent -->
         <path d="M153 264 L160 275 L167 264" stroke="#58a6ff" stroke-width="1.5" fill="none" opacity="0.5" />
+
+        <!-- Floating tag badges -->
+        <rect x="34" y="120" width="34" height="14" rx="7" fill="#58a6ff" opacity="0.12" />
+        <text x="51" y="130.5" font-family="monospace" font-size="7" fill="#58a6ff" opacity="0.7" text-anchor="middle">Astro</text>
+
+        <rect x="248" y="200" width="36" height="14" rx="7" fill="#3fb950" opacity="0.12" />
+        <text x="266" y="210.5" font-family="monospace" font-size="7" fill="#3fb950" opacity="0.7" text-anchor="middle">React</text>
 
         <!-- Decorative dots -->
         <circle cx="70" cy="80" r="3" fill="#58a6ff" opacity="0.3" />

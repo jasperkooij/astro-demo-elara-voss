@@ -4,8 +4,10 @@ interface Props {
   title?: string;
   description?: string;
   pubDate?: Date;
+  updatedDate?: Date;
   author?: string;
   pageUrl?: string;
+  tags?: string[];
 }
 
 const {
@@ -13,12 +15,13 @@ const {
   title,
   description,
   pubDate,
+  updatedDate,
   author = 'Elara Voss',
   pageUrl = Astro.url.href,
+  tags = [],
 } = Astro.props;
 
 const siteUrl = 'https://elaravoss.dev';
-
 const personId = `${siteUrl}/#person`;
 const websiteId = `${siteUrl}/#website`;
 
@@ -32,23 +35,31 @@ const graph: object[] = [
     publisher: { '@id': personId },
     potentialAction: {
       '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${siteUrl}/blog/?q={search_term_string}`,
-      },
+      target: `${siteUrl}/blog/?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.speakable'],
     },
   },
   {
     '@type': 'Person',
     '@id': personId,
     name: 'Elara Voss',
+    description:
+      'Senior frontend engineer and design systems architect with 8 years of experience, based in Amsterdam, Netherlands. Specialises in Astro, React, TypeScript, Core Web Vitals optimisation, and design system architecture.',
     jobTitle: 'Senior Frontend Engineer & Design Systems Architect',
     url: `${siteUrl}/`,
-    image: `${siteUrl}/og-default.svg`,
+    image: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/og-default.svg`,
+      width: 1200,
+      height: 630,
+    },
     sameAs: [
       'https://github.com/elaravoss',
-      'https://twitter.com/elaravoss',
+      'https://x.com/elaravoss',
       'https://linkedin.com/in/elaravoss',
     ],
     knowsAbout: [
@@ -80,7 +91,7 @@ if (type === 'blogposting' && title && description && pubDate) {
     headline: title,
     description,
     datePublished: pubDate.toISOString(),
-    dateModified: pubDate.toISOString(),
+    dateModified: (updatedDate ?? pubDate).toISOString(),
     author: {
       '@type': 'Person',
       '@id': personId,
@@ -92,6 +103,18 @@ if (type === 'blogposting' && title && description && pubDate) {
       '@id': pageUrl,
     },
     url: pageUrl,
+    image: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/og-default.svg`,
+      width: 1200,
+      height: 630,
+    },
+    keywords: tags.join(', '),
+    articleSection: tags[0] ?? 'Frontend Engineering',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'p:first-of-type'],
+    },
   });
 
   graph.push({

@@ -11,9 +11,10 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   canonicalURL?: string;
+  suppressBaseSchema?: boolean;
 }
 
-const { title, description, ogImage, ogType = 'website', canonicalURL } = Astro.props;
+const { title, description, ogImage, ogType = 'website', canonicalURL, suppressBaseSchema = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,7 +27,7 @@ const { title, description, ogImage, ogType = 'website', canonicalURL } = Astro.
       ogType={ogType}
       canonicalURL={canonicalURL}
     />
-    <StructuredData type="website" />
+    {!suppressBaseSchema && <StructuredData type="website" />}
     <slot name="head" />
     <ClientRouter />
   </head>

@@ -6,12 +6,13 @@ interface Props {
   title: string;
   description: string;
   pubDate: Date;
+  updatedDate?: Date;
   author: string;
   tags: string[];
   ogImage?: string;
 }
 
-const { title, description, pubDate, author, tags, ogImage } = Astro.props;
+const { title, description, pubDate, updatedDate, author, tags, ogImage } = Astro.props;
 
 const formattedDate = pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -25,6 +26,7 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
   description={description}
   ogType="article"
   ogImage={ogImage}
+  suppressBaseSchema={true}
 >
   <StructuredData
     slot="head"
@@ -32,7 +34,9 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
     title={title}
     description={description}
     pubDate={pubDate}
+    updatedDate={updatedDate}
     author={author}
+    tags={tags}
     pageUrl={Astro.url.href}
   />
 
@@ -40,11 +44,11 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
     <nav class="mb-8" aria-label="Breadcrumb">
       <ol class="flex items-center gap-2 text-sm text-muted">
         <li>
-          <a href="/" class="hover:text-text transition-colors">Home</a>
+          <a href="/" class="hover:text-text transition-colors underline underline-offset-2 decoration-border hover:decoration-muted">Home</a>
         </li>
         <li aria-hidden="true" class="text-border">/</li>
         <li>
-          <a href="/blog/" class="hover:text-text transition-colors">Blog</a>
+          <a href="/blog/" class="hover:text-text transition-colors underline underline-offset-2 decoration-border hover:decoration-muted">Blog</a>
         </li>
         <li aria-hidden="true" class="text-border">/</li>
         <li class="text-text truncate max-w-[200px]" aria-current="page">
@@ -78,6 +82,12 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
         <time datetime={pubDate.toISOString()}>
           {formattedDate}
         </time>
+        {updatedDate && (
+          <>
+            <span aria-hidden="true">&middot;</span>
+            <span>Updated <time datetime={updatedDate.toISOString()}>{updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time></span>
+          </>
+        )}
       </div>
     </header>
 

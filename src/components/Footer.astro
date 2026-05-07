@@ -59,16 +59,17 @@ const socialLinks = [
     <div
       class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-8 border-t border-border"
     >
-      <p class="text-muted text-sm">
-        &copy; {year} Elara Voss. Built with
+      <p class="text-muted text-sm flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span>&copy; {year} Elara Voss. Built with
         <a
           href="https://astro.build"
-          class="text-accent hover:opacity-80 transition-opacity"
+          class="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity"
           rel="noopener noreferrer"
           target="_blank"
         >
           Astro
-        </a>.
+        </a>.</span>
+        <a href="/privacy/" class="hover:text-text transition-colors">Privacy Policy</a>
       </p>
 
       <ul class="flex items-center gap-4">

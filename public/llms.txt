@@ -18,7 +18,13 @@ Elara offers the following professional services to product teams, startups, and
 
 ## Blog
 
-Technical articles covering:
+Recent technical articles:
+
+- [Why I Ditched React for Astro (And Never Looked Back)](https://elaravoss.dev/blog/ditching-react-for-astro/) — Lighthouse 54→100, JS bundle 380kb→14kb, LCP 4.1s→1.2s, organic search up 34% after switching a SaaS marketing site from React/Next.js to Astro.
+- [The Design System That Saved Our Team 40 Hours Per Week](https://elaravoss.dev/blog/design-system-that-saved-40-hours/) — How the Meridian design system reduced UI-related engineering time by 4.4 hrs/engineer/week across 65 engineers and 12 products — saving $1.77M/year.
+- [Core Web Vitals Aren't Optional: A Practical Guide for 2025](https://elaravoss.dev/blog/core-web-vitals-practical-guide/) — LCP, CLS, INP explained with code fixes. Real case study: LCP 4.8s→1.4s, CLS 0.28→0.03, INP 380ms→95ms; organic impressions up 22%, conversion up 8%.
+
+Topics covered:
 
 - Web performance and Core Web Vitals (LCP, CLS, INP)
 - Design systems architecture and design tokens
@@ -32,12 +38,12 @@ Technical articles covering:
 - Website: https://elaravoss.dev/
 - Email: hello@elaravoss.dev
 - GitHub: https://github.com/elaravoss
-- Twitter/X: https://twitter.com/elaravoss
+- Twitter/X: https://x.com/elaravoss
 - LinkedIn: https://linkedin.com/in/elaravoss
 
 ## Technical Stack
 
-This site is built with Astro 6, Tailwind CSS v4, TypeScript, and zero client-side JavaScript. It achieves a 100/100 Lighthouse Performance score.
+This site is built with Astro 6, Tailwind CSS v4, TypeScript, and zero client-side JavaScript. It achieves a 100/100 Lighthouse Performance score and is deployed on Cloudflare Pages.
 
 ## Sitemap
 

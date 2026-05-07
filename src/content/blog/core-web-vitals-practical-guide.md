@@ -2,15 +2,47 @@
 title: "Core Web Vitals Aren't Optional: A Practical Guide for 2025"
 description: "LCP, CLS, INP explained with real fixes you can ship today. No fluff — just the patterns that actually move the needle on Core Web Vitals."
 pubDate: 2025-01-22
+updatedDate: 2026-05-06
 author: "Elara Voss"
 tags: ["Performance", "Core Web Vitals", "SEO", "JavaScript"]
 ---
 
-Google's Core Web Vitals have been a ranking signal since 2021. Most engineering teams know this. Fewer teams have actually done the work to achieve "Good" ratings across all three metrics. I've spent the last two years doing Core Web Vitals audits and fixes for clients across e-commerce, SaaS, and media. Here's what I've learned.
+Google's [Core Web Vitals](https://web.dev/articles/vitals) have been a ranking signal since 2021. Most engineering teams know this. Fewer teams have actually done the work to achieve "Good" ratings across all three metrics. I've spent the last two years doing Core Web Vitals audits and fixes for clients across e-commerce, SaaS, and media. Here's what I've learned.
+
+<figure style="margin: 1.5rem 0; padding: 1.5rem; background: #161b22; border: 1px solid #30363d; border-radius: 0.75rem;" role="img" aria-label="Core Web Vitals thresholds: Good, Needs Improvement, Poor">
+  <svg viewBox="0 0 480 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+    <text x="0" y="16" font-family="monospace" font-size="11" fill="#8b949e">Core Web Vitals — thresholds at a glance</text>
+    <!-- LCP row -->
+    <text x="0" y="46" font-family="monospace" font-size="10" fill="#e6edf3" font-weight="bold">LCP</text>
+    <rect x="50" y="34" width="100" height="18" rx="4" fill="#3fb950" opacity="0.85"/>
+    <text x="100" y="47" font-family="monospace" font-size="9" fill="#0d1117" text-anchor="middle" font-weight="bold">Good &lt;2.5s</text>
+    <rect x="156" y="34" width="100" height="18" rx="4" fill="#e3a008" opacity="0.85"/>
+    <text x="206" y="47" font-family="monospace" font-size="9" fill="#0d1117" text-anchor="middle" font-weight="bold">Needs impr.</text>
+    <rect x="262" y="34" width="100" height="18" rx="4" fill="#e85555" opacity="0.85"/>
+    <text x="312" y="47" font-family="monospace" font-size="9" fill="#e6edf3" text-anchor="middle" font-weight="bold">Poor &gt;4s</text>
+    <!-- CLS row -->
+    <text x="0" y="76" font-family="monospace" font-size="10" fill="#e6edf3" font-weight="bold">CLS</text>
+    <rect x="50" y="64" width="100" height="18" rx="4" fill="#3fb950" opacity="0.85"/>
+    <text x="100" y="77" font-family="monospace" font-size="9" fill="#0d1117" text-anchor="middle" font-weight="bold">Good &lt;0.1</text>
+    <rect x="156" y="64" width="100" height="18" rx="4" fill="#e3a008" opacity="0.85"/>
+    <text x="206" y="77" font-family="monospace" font-size="9" fill="#0d1117" text-anchor="middle" font-weight="bold">Needs impr.</text>
+    <rect x="262" y="64" width="100" height="18" rx="4" fill="#e85555" opacity="0.85"/>
+    <text x="312" y="77" font-family="monospace" font-size="9" fill="#e6edf3" text-anchor="middle" font-weight="bold">Poor &gt;0.25</text>
+    <!-- INP row -->
+    <text x="0" y="106" font-family="monospace" font-size="10" fill="#e6edf3" font-weight="bold">INP</text>
+    <rect x="50" y="94" width="100" height="18" rx="4" fill="#3fb950" opacity="0.85"/>
+    <text x="100" y="107" font-family="monospace" font-size="9" fill="#0d1117" text-anchor="middle" font-weight="bold">Good &lt;200ms</text>
+    <rect x="156" y="94" width="100" height="18" rx="4" fill="#e3a008" opacity="0.85"/>
+    <text x="206" y="107" font-family="monospace" font-size="9" fill="#0d1117" text-anchor="middle" font-weight="bold">Needs impr.</text>
+    <rect x="262" y="94" width="100" height="18" rx="4" fill="#e85555" opacity="0.85"/>
+    <text x="312" y="107" font-family="monospace" font-size="9" fill="#e6edf3" text-anchor="middle" font-weight="bold">Poor &gt;500ms</text>
+  </svg>
+  <figcaption style="font-size:0.75rem;color:#8b949e;margin-top:0.5rem;font-family:monospace">Source: web.dev/vitals — measured at 75th percentile of real-user data</figcaption>
+</figure>
 
 ## Why CWV Still Matter in 2025
 
-The cynical view is that CWV are a Google PR exercise — a way to nudge the web toward better performance while conveniently aligning with Google's own interests. That's partially true and entirely irrelevant. Faster pages convert better. Google's own data shows that sites loading in 1 second convert 3x better than sites loading in 5 seconds. Core Web Vitals are a proxy for that.
+The cynical view is that CWV are a Google PR exercise — a way to nudge the web toward better performance while conveniently aligning with Google's own interests. That's partially true and entirely irrelevant. Faster pages convert better. [Google's own research](https://web.dev/articles/why-cwa-speed-matters) shows that sites loading in 1 second convert 3x better than sites loading in 5 seconds. Core Web Vitals are a proxy for that.
 
 The less cynical view: the three metrics Google chose — LCP, CLS, and INP — are genuinely good proxies for user experience. If you optimize for them honestly (not by gaming the metrics), you make your site measurably better for real users.
 
@@ -150,3 +182,7 @@ After four weeks of fixes:
 Three months later, their organic search impressions were up 22% and conversion rate improved 8%. Same products, same prices, same copy — just faster.
 
 Core Web Vitals are solvable. The fixes are not glamorous, but they compound. Start with your LCP image, eliminate your layout shifts, and measure your INP with real user data. That sequence alone will move the needle on most sites.
+
+---
+
+*Further reading: [web.dev/vitals](https://web.dev/articles/vitals) · [Google Search Central — Page Experience](https://developers.google.com/search/docs/appearance/page-experience) · [MDN — Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) · [Chrome User Experience Report](https://developer.chrome.com/docs/crux)*

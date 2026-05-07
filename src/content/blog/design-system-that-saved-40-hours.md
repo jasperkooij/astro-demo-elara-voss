@@ -2,6 +2,7 @@
 title: "The Design System That Saved Our Team 40 Hours Per Week"
 description: "How we built a component library that eliminated design-dev handoff friction and saved 40+ engineering hours every single week."
 pubDate: 2025-02-08
+updatedDate: 2026-05-06
 author: "Elara Voss"
 tags: ["Design Systems", "TypeScript", "React", "Productivity"]
 ---
@@ -20,7 +21,53 @@ This is the real problem design systems solve. It's not primarily about code reu
 
 Before writing a single component, we spent three weeks on design tokens. This turned out to be the most important decision we made.
 
-We structured tokens in three layers:
+We structured tokens in three layers, following the [Design Tokens W3C Community Group specification](https://www.w3.org/community/design-tokens/):
+
+<figure style="margin: 2rem 0; padding: 1.5rem; background: #161b22; border: 1px solid #30363d; border-radius: 0.75rem;" role="img" aria-label="Three-tier design token architecture diagram">
+  <svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+    <!-- Layer 1: Primitives -->
+    <rect x="0" y="20" width="140" height="120" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+    <text x="70" y="44" font-family="monospace" font-size="10" fill="#58a6ff" text-anchor="middle" font-weight="bold">Primitive</text>
+    <text x="70" y="60" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--color-blue-500</text>
+    <text x="70" y="74" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--spacing-4</text>
+    <text x="70" y="88" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--radius-md</text>
+    <rect x="20" y="100" width="100" height="6" rx="3" fill="#58a6ff" opacity="0.2"/>
+    <rect x="20" y="112" width="80" height="6" rx="3" fill="#58a6ff" opacity="0.15"/>
+    <rect x="20" y="124" width="90" height="6" rx="3" fill="#58a6ff" opacity="0.1"/>
+    <!-- Arrow 1 -->
+    <path d="M148 80 L168 80" stroke="#30363d" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Layer 2: Semantic -->
+    <rect x="170" y="20" width="140" height="120" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+    <text x="240" y="44" font-family="monospace" font-size="10" fill="#3fb950" text-anchor="middle" font-weight="bold">Semantic</text>
+    <text x="240" y="60" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--color-action</text>
+    <text x="240" y="74" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--color-bg</text>
+    <text x="240" y="88" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--spacing-gap</text>
+    <rect x="190" y="100" width="100" height="6" rx="3" fill="#3fb950" opacity="0.2"/>
+    <rect x="190" y="112" width="80" height="6" rx="3" fill="#3fb950" opacity="0.15"/>
+    <rect x="190" y="124" width="90" height="6" rx="3" fill="#3fb950" opacity="0.1"/>
+    <!-- Arrow 2 -->
+    <path d="M318 80 L338 80" stroke="#30363d" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Layer 3: Component -->
+    <rect x="340" y="20" width="140" height="120" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+    <text x="410" y="44" font-family="monospace" font-size="10" fill="#e6edf3" text-anchor="middle" font-weight="bold">Component</text>
+    <text x="410" y="60" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--button-height</text>
+    <text x="410" y="74" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--card-padding</text>
+    <text x="410" y="88" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">--input-radius</text>
+    <rect x="360" y="100" width="100" height="6" rx="3" fill="#e6edf3" opacity="0.12"/>
+    <rect x="360" y="112" width="80" height="6" rx="3" fill="#e6edf3" opacity="0.08"/>
+    <rect x="360" y="124" width="90" height="6" rx="3" fill="#e6edf3" opacity="0.06"/>
+    <!-- Layer labels -->
+    <text x="70" y="155" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">Raw values</text>
+    <text x="240" y="155" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">Meaning layer</text>
+    <text x="410" y="155" font-family="monospace" font-size="8" fill="#8b949e" text-anchor="middle">Overridable</text>
+    <defs>
+      <marker id="arrow" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+        <path d="M0 0 L6 3 L0 6 Z" fill="#30363d"/>
+      </marker>
+    </defs>
+  </svg>
+  <figcaption style="font-size:0.75rem;color:#8b949e;margin-top:0.5rem;font-family:monospace">Three-tier token architecture: primitive → semantic → component</figcaption>
+</figure>
 
 **Primitive tokens** are raw values with no semantic meaning. `--color-blue-500: #3b82f6`. `--spacing-4: 1rem`. `--radius-md: 6px`. These are never used directly in component code.
 
@@ -75,3 +122,7 @@ At an average fully-loaded cost of $120/hour for a senior engineer, that's $1.77
 The 40 hours figure I use is conservative. It's based only on engineers, not design time saved, not QA time saved, not the reduced bug rate from consistent accessibility implementation. The real number is higher.
 
 Design systems are infrastructure. Like good infrastructure, the cost of building them is obvious and the cost of not building them is invisible until it becomes catastrophic.
+
+---
+
+*Further reading: [Design Tokens W3C Community Group](https://www.w3.org/community/design-tokens/) · [Storybook documentation](https://storybook.js.org/docs) · [Chromatic visual testing](https://www.chromatic.com/docs/) · Nathan Curtis's [Tokens in Design Systems](https://medium.com/eightshapes-llc/tokens-in-design-systems-25dd82d58421)*
