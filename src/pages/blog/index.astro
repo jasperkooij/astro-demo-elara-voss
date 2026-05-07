@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout
+  title="Blog — Elara Voss"
+  description="Technical writing by Elara Voss on web performance, design systems, Astro, React, TypeScript, and frontend engineering."
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+    <div class="mb-12">
+      <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3">Blog</p>
+      <h1 class="text-4xl font-bold text-text mb-4">Writing</h1>
+      <p class="text-muted max-w-xl leading-relaxed">
+        Articles on web performance, design systems, and modern frontend engineering. No
+        filler — only things I&rsquo;ve actually built, measured, or broken.
+      </p>
+    </div>
+
+    {
+      posts.length > 0 ? (
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {posts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              slug={post.id}
+              tags={post.data.tags}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-muted">No posts published yet.</p>
+      )
+    }
+  </div>
+</BaseLayout>

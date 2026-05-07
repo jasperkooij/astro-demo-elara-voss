@@ -1,17 +1,120 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import BlogCard from '../components/BlogCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
 
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+const featuredProjects = [
+  {
+    title: 'Meridian Design System',
+    description:
+      'Component library and token system powering 12 products across a Series B fintech company. Reduced UI decision-making time by 40 hours per week across 65 engineers.',
+    tags: ['React', 'TypeScript', 'Storybook', 'Design Tokens'],
+    year: 2024,
+  },
+  {
+    title: 'Vela Trading Dashboard',
+    description:
+      'High-performance real-time dashboard handling 50,000 price updates per second using canvas rendering and a custom reconciliation layer. Achieved sub-16ms frame times.',
+    tags: ['Astro', 'WebSockets', 'Canvas API', 'TypeScript'],
+    year: 2024,
+  },
+  {
+    title: 'Lumino E-commerce',
+    description:
+      'Full performance audit and rebuild of a €50M ARR e-commerce platform. Lifted Lighthouse scores from 54 to 100, improving organic search impressions by 34%.',
+    tags: ['Next.js', 'Core Web Vitals', 'Performance'],
+    year: 2023,
+  },
+  {
+    title: 'Helix CMS',
+    description:
+      'Headless CMS with a custom block-based editor built for a media company publishing 200+ articles per week. Custom Astro integration for zero-latency preview.',
+    tags: ['Astro', 'TypeScript', 'TipTap', 'PostgreSQL'],
+    year: 2023,
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Elara Voss — Senior Frontend Engineer & Design Systems Architect"
+  description="Elara Voss is a senior frontend engineer and design systems architect based in Amsterdam. Specialising in Astro, React, TypeScript, and web performance."
+>
+  <Hero />
+
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-20 border-t border-border">
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-text">Featured Work</h2>
+        <p class="text-muted text-sm mt-1">Selected projects from the last two years.</p>
+      </div>
+      <a
+        href="/work/"
+        class="text-accent text-sm font-medium hover:opacity-80 transition-opacity shrink-0"
+      >
+        All projects &rarr;
+      </a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      {featuredProjects.map((project) => <ProjectCard {...project} />)}
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-20 border-t border-border">
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-text">Latest Writing</h2>
+        <p class="text-muted text-sm mt-1">
+          Technical articles on performance, design systems, and frontend engineering.
+        </p>
+      </div>
+      <a
+        href="/blog/"
+        class="text-accent text-sm font-medium hover:opacity-80 transition-opacity shrink-0"
+      >
+        All posts &rarr;
+      </a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        posts.map((post) => (
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id}
+            tags={post.data.tags}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-20 border-t border-border">
+    <div class="bg-surface border border-border rounded-xl p-8 sm:p-12 text-center">
+      <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3">
+        Available for projects
+      </p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-text mb-4">
+        Let&rsquo;s build something exceptional.
+      </h2>
+      <p class="text-muted max-w-xl mx-auto mb-8 leading-relaxed">
+        I take on select frontend engineering and design system projects throughout the year.
+        If you&rsquo;re building something that demands precision, let&rsquo;s talk.
+      </p>
+      <a
+        href="/services/"
+        class="inline-flex items-center gap-2 bg-accent text-bg px-8 py-3 rounded-lg font-semibold text-sm hover:bg-accent/90 transition-colors"
+      >
+        View services &amp; rates
+      </a>
+    </div>
+  </section>
+</BaseLayout>

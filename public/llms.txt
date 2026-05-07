@@ -1,0 +1,48 @@
+# Elara Voss — Senior Frontend Engineer & Design Systems Architect
+
+> Personal portfolio and technical blog of Elara Voss, a senior frontend engineer and design systems architect based in Amsterdam, Netherlands.
+
+## About
+
+Elara Voss is a Senior Frontend Engineer with 8 years of professional experience, specialising in Astro, React, TypeScript, design system architecture, and web performance engineering. She holds a BSc in Computer Science from TU Delft (2018) and is based in Amsterdam, Netherlands.
+
+She is the lead architect of Meridian — a design system powering 12 products across a fintech company — and is known for her work on Core Web Vitals optimisation and high-performance frontend builds.
+
+## Services
+
+Elara offers the following professional services to product teams, startups, and agencies:
+
+- **Frontend Development** — Bespoke Astro/React builds, performance-first, accessible by default. From €8,000/project.
+- **Design Systems Architecture** — Token strategy, component library, Storybook, adoption playbook. From €12,000/engagement.
+- **Performance Consulting** — Core Web Vitals audit, LCP/CLS/INP root cause analysis, fix plan, and optional implementation. From €2,500/audit.
+
+## Blog
+
+Technical articles covering:
+
+- Web performance and Core Web Vitals (LCP, CLS, INP)
+- Design systems architecture and design tokens
+- Astro framework — patterns, migration, island architecture
+- React — component API design, state management, performance
+- TypeScript — practical patterns for frontend engineering
+- Frontend accessibility and WCAG compliance
+
+## Contact & Social
+
+- Website: https://elaravoss.dev/
+- Email: hello@elaravoss.dev
+- GitHub: https://github.com/elaravoss
+- Twitter/X: https://twitter.com/elaravoss
+- LinkedIn: https://linkedin.com/in/elaravoss
+
+## Technical Stack
+
+This site is built with Astro 6, Tailwind CSS v4, TypeScript, and zero client-side JavaScript. It achieves a 100/100 Lighthouse Performance score.
+
+## Sitemap
+
+https://elaravoss.dev/sitemap-index.xml
+
+## RSS Feed
+
+https://elaravoss.dev/rss.xml

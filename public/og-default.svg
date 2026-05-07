@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d1117"/>
+
+  <!-- Grid lines for visual texture -->
+  <line x1="0" y1="210" x2="1200" y2="210" stroke="#161b22" stroke-width="1"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="#161b22" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="#161b22" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="630" stroke="#161b22" stroke-width="1"/>
+
+  <!-- Accent decoration -->
+  <rect x="80" y="200" width="4" height="230" rx="2" fill="#58a6ff" opacity="0.6"/>
+
+  <!-- Name -->
+  <text
+    x="120"
+    y="285"
+    font-family="ui-sans-serif, system-ui, -apple-system, sans-serif"
+    font-size="72"
+    font-weight="700"
+    fill="#e6edf3"
+    letter-spacing="-1"
+  >Elara Voss</text>
+
+  <!-- Title -->
+  <text
+    x="120"
+    y="350"
+    font-family="ui-sans-serif, system-ui, -apple-system, sans-serif"
+    font-size="28"
+    font-weight="400"
+    fill="#58a6ff"
+    letter-spacing="0"
+  >Senior Frontend Engineer &amp; Design Systems Architect</text>
+
+  <!-- Location -->
+  <text
+    x="120"
+    y="395"
+    font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+    font-size="18"
+    fill="#8b949e"
+  >Amsterdam · elaravoss.dev</text>
+
+  <!-- Decorative code brackets -->
+  <text
+    x="980"
+    y="360"
+    font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+    font-size="200"
+    fill="#30363d"
+    opacity="0.5"
+  >&lt;/&gt;</text>
+
+  <!-- Bottom border -->
+  <rect x="0" y="610" width="1200" height="4" fill="#58a6ff" opacity="0.3"/>
+</svg>

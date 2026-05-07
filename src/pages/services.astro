@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+    title: 'Frontend Development',
+    rate: 'From €8,000 / project',
+    description:
+      'Bespoke frontend builds with Astro or React — performance-first, accessible by default, and maintainable by your team after handoff.',
+    deliverables: [
+      'Architecture scoping and technology recommendation',
+      'Component-driven development with Storybook',
+      'Core Web Vitals optimisation (target: 100/100 Lighthouse)',
+      'WCAG 2.2 AA accessibility compliance',
+      'TypeScript throughout, with test coverage',
+      'Handoff documentation and onboarding session',
+    ],
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>`,
+    title: 'Design Systems Architecture',
+    rate: 'From €12,000 / engagement',
+    description:
+      'End-to-end design system strategy and build — from token architecture and component API design to Storybook setup and team adoption.',
+    deliverables: [
+      'Design token audit and three-tier token architecture',
+      'Component library with variants, states, and documentation',
+      'Figma variable sync with code tokens',
+      'Automated visual regression with Chromatic',
+      'Contribution guidelines and governance model',
+      'Team workshops and onboarding programme',
+    ],
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    title: 'Performance Consulting',
+    rate: 'From €2,500 / audit',
+    description:
+      'Comprehensive Core Web Vitals audit with a prioritised fix plan — and optional implementation support if you need an extra pair of hands.',
+    deliverables: [
+      'Lighthouse and CrUX real-user data analysis',
+      'LCP, CLS, and INP root cause identification',
+      'Prioritised fix plan with effort/impact estimates',
+      'Implementation of high-impact fixes (optional add-on)',
+      'Monitoring setup with web-vitals.js + analytics',
+      'Follow-up review 30 days post-implementation',
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'How do I get started?',
+    a: 'Send me a brief description of your project or challenge via email. I\'ll respond within 48 hours with whether I\'m a good fit, and we\'ll schedule a 30-minute scoping call from there.',
+  },
+  {
+    q: 'Do you work with teams outside the Netherlands?',
+    a: 'Yes — the majority of my clients are remote. I work across European time zones and am available for occasional travel for workshops or kick-offs.',
+  },
+  {
+    q: 'What\'s your typical project timeline?',
+    a: 'Frontend builds typically run 6–12 weeks depending on scope. Design system engagements are 10–16 weeks. Performance audits are delivered within 5 business days of access being granted.',
+  },
+  {
+    q: 'Do you offer retainer arrangements?',
+    a: 'For ongoing design system maintenance and evolution, yes — I offer monthly retainers for teams that have completed an initial engagement with me.',
+  },
+];
+---
+
+<BaseLayout
+  title="Services — Elara Voss"
+  description="Frontend development, design systems architecture, and performance consulting by Elara Voss. Based in Amsterdam, available remotely across Europe."
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+    <div class="mb-12">
+      <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3">Services</p>
+      <h1 class="text-4xl font-bold text-text mb-4">How I Can Help</h1>
+      <p class="text-muted max-w-xl leading-relaxed">
+        I work with product teams, startups, and agencies on frontend engineering, design systems,
+        and performance. I take on a small number of projects each year so I can do each one properly.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-6 mb-20">
+      {
+        services.map(({ icon, title, rate, description, deliverables }) => (
+          <article class="bg-surface border border-border rounded-xl p-6 flex flex-col gap-5">
+            <div class="text-accent w-10 h-10 flex items-center justify-center bg-accent/10 rounded-lg">
+              <Fragment set:html={icon} />
+            </div>
+
+            <div>
+              <h2 class="text-lg font-semibold text-text mb-1">{title}</h2>
+              <p class="text-accent text-xs font-mono">{rate}</p>
+            </div>
+
+            <p class="text-muted text-sm leading-relaxed">{description}</p>
+
+            <ul class="space-y-2 flex-1">
+              {deliverables.map((item) => (
+                <li class="flex items-start gap-2 text-sm text-muted">
+                  <span class="text-green mt-0.5 shrink-0" aria-hidden="true">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+
+    <section class="mb-20 pt-12 border-t border-border">
+      <h2 class="text-xl font-bold text-text mb-8">Frequently Asked Questions</h2>
+      <dl class="space-y-6 max-w-2xl">
+        {
+          faqs.map(({ q, a }) => (
+            <div class="border border-border rounded-lg p-5 bg-surface">
+              <dt class="text-text font-semibold mb-2">{q}</dt>
+              <dd class="text-muted text-sm leading-relaxed">{a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="pt-12 border-t border-border">
+      <div class="bg-surface border border-border rounded-xl p-8 sm:p-12 text-center max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold text-text mb-3">Ready to talk?</h2>
+        <p class="text-muted mb-6 leading-relaxed">
+          Send me a brief overview of your project and I&rsquo;ll get back to you within 48 hours.
+        </p>
+        <a
+          href="mailto:hello@elaravoss.dev"
+          class="inline-flex items-center gap-2 bg-accent text-bg px-8 py-3 rounded-lg font-semibold text-sm hover:bg-accent/90 transition-colors"
+        >
+          hello@elaravoss.dev
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

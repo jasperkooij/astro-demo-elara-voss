@@ -1,0 +1,97 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import StructuredData from '../components/StructuredData.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  author: string;
+  tags: string[];
+  ogImage?: string;
+}
+
+const { title, description, pubDate, author, tags, ogImage } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`${title} | Elara Voss`}
+  description={description}
+  ogType="article"
+  ogImage={ogImage}
+>
+  <StructuredData
+    slot="head"
+    type="blogposting"
+    title={title}
+    description={description}
+    pubDate={pubDate}
+    author={author}
+    pageUrl={Astro.url.href}
+  />
+
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+    <nav class="mb-8" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2 text-sm text-muted">
+        <li>
+          <a href="/" class="hover:text-text transition-colors">Home</a>
+        </li>
+        <li aria-hidden="true" class="text-border">/</li>
+        <li>
+          <a href="/blog/" class="hover:text-text transition-colors">Blog</a>
+        </li>
+        <li aria-hidden="true" class="text-border">/</li>
+        <li class="text-text truncate max-w-[200px]" aria-current="page">
+          {title}
+        </li>
+      </ol>
+    </nav>
+
+    <header class="mb-12">
+      <div class="flex flex-wrap gap-2 mb-4">
+        {
+          tags.map((tag) => (
+            <span class="text-xs font-mono text-accent bg-accent/10 px-2 py-0.5 rounded">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-bold text-text leading-tight mb-4">
+        {title}
+      </h1>
+
+      <p class="text-muted text-base leading-relaxed mb-6">
+        {description}
+      </p>
+
+      <div class="flex items-center gap-3 text-sm text-muted border-t border-border pt-4">
+        <span>By <span rel="author" class="text-text font-medium">{author}</span></span>
+        <span aria-hidden="true">&middot;</span>
+        <time datetime={pubDate.toISOString()}>
+          {formattedDate}
+        </time>
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <footer class="mt-16 pt-8 border-t border-border">
+      <a
+        href="/blog/"
+        class="inline-flex items-center gap-2 text-accent hover:opacity-80 transition-opacity text-sm font-medium"
+      >
+        &larr; Back to all posts
+      </a>
+    </footer>
+  </article>
+</BaseLayout>

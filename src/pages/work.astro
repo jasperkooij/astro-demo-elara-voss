@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = [
+  {
+    title: 'Meridian Design System',
+    description:
+      'Component library and design token system powering 12 products across a Series B fintech company. Built the full stack: primitive tokens, semantic tokens, component tokens, 80+ components, Storybook documentation, Chromatic visual regression, and a migration playbook. Saved 40 engineering hours per week.',
+    tags: ['React', 'TypeScript', 'Storybook', 'Chromatic', 'Design Tokens'],
+    year: 2024,
+  },
+  {
+    title: 'Vela Trading Dashboard',
+    description:
+      'High-performance real-time dashboard handling 50,000 price updates per second. Used canvas rendering for the order book and a custom WebSocket reconciliation layer to achieve consistent sub-16ms frame times. Built in Astro with a React island for the interactive chart.',
+    tags: ['Astro', 'React', 'WebSockets', 'Canvas API', 'TypeScript'],
+    year: 2024,
+  },
+  {
+    title: 'Lumino E-commerce Platform',
+    description:
+      'Full Core Web Vitals audit and performance rebuild for a €50M ARR e-commerce business. Identified and fixed LCP, CLS, and INP regressions introduced during a rapid feature sprint. Lighthouse Performance went from 54 to 100. Organic search impressions up 34% over the following quarter.',
+    tags: ['Next.js', 'Core Web Vitals', 'Performance', 'TypeScript'],
+    year: 2023,
+  },
+  {
+    title: 'Helix CMS',
+    description:
+      'Headless CMS with a custom block-based editor for a media company publishing 200+ articles per week. Editors get a Google Docs-like writing experience; the frontend gets fully static Astro output with zero JavaScript by default. Preview latency under 200ms.',
+    tags: ['Astro', 'TypeScript', 'TipTap', 'PostgreSQL'],
+    year: 2023,
+  },
+  {
+    title: 'AccessKit CLI',
+    description:
+      'Open source CLI tool for automated accessibility auditing of production sites. Wraps axe-core with a CI-friendly reporter, Git integration for tracking regressions, and configurable WCAG level targeting. Used by 300+ teams.',
+    tags: ['Node.js', 'TypeScript', 'axe-core', 'CLI'],
+    year: 2023,
+    link: 'https://github.com/elaravoss/accesskit',
+  },
+  {
+    title: 'Signal Dashboard',
+    description:
+      'IoT sensor visualisation platform for a smart building company. Displays real-time data from 2,000+ sensors across 15 buildings. D3.js charts with WebSocket updates, map-based floor plan overlays, and a configurable alerting system.',
+    tags: ['Astro', 'D3.js', 'TypeScript', 'WebSockets', 'PostgreSQL'],
+    year: 2022,
+  },
+];
+---
+
+<BaseLayout
+  title="Work — Elara Voss"
+  description="Selected projects by Elara Voss — design systems, performance engineering, real-time dashboards, and open source tools."
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+    <div class="mb-12">
+      <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3">Work</p>
+      <h1 class="text-4xl font-bold text-text mb-4">Selected Projects</h1>
+      <p class="text-muted max-w-xl leading-relaxed">
+        A selection of projects from the last three years — design systems, performance work,
+        real-time interfaces, and the occasional open source tool.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      {projects.map((project) => <ProjectCard {...project} />)}
+    </div>
+
+    <div class="mt-16 pt-12 border-t border-border">
+      <p class="text-muted text-sm text-center">
+        Interested in working together?{' '}
+        <a href="/services/" class="text-accent hover:opacity-80 transition-opacity">
+          View services &amp; rates &rarr;
+        </a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>
