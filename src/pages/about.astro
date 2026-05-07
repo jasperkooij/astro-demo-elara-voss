@@ -3,6 +3,19 @@ import { Picture } from 'astro:assets';
 import profileImg from '../assets/images/profile.jpg';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const siteUrl = 'https://elaravoss.dev';
+const pageUrl = `${siteUrl}/about/`;
+const webpageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': pageUrl,
+  name: 'About Elara Voss — Senior Frontend Engineer',
+  description: 'Elara Voss is a senior frontend engineer and design systems architect with 8 years of experience, based in Amsterdam. Learn about her background, skills, and engineering philosophy.',
+  url: pageUrl,
+  isPartOf: { '@id': `${siteUrl}/#website` },
+  about: { '@id': `${siteUrl}/#person` },
+};
+
 const skills = [
   'Astro', 'React', 'TypeScript', 'CSS / Tailwind',
   'Design Systems', 'Figma', 'Node.js', 'Performance Auditing',
@@ -56,10 +69,14 @@ const principles = [
   title="About Elara Voss — Senior Frontend Engineer"
   description="Elara Voss is a senior frontend engineer and design systems architect with 8 years of experience, based in Amsterdam. Learn about her background, skills, and engineering philosophy."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} slot="head" />
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
     <section class="mb-20 grid md:grid-cols-[1fr_220px] gap-12 items-start">
       <div>
-        <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3 animate-fade-up">About</p>
+        <div class="flex items-center gap-4 mb-3 animate-fade-up">
+          <p class="text-accent text-sm font-mono tracking-wide uppercase">About</p>
+          <p class="text-xs font-mono text-muted">Last updated: May 2026</p>
+        </div>
         <h1 class="text-4xl font-bold text-text mb-8 leading-tight animate-fade-up-d1">
           I make the web faster, more accessible, and more consistent.
         </h1>

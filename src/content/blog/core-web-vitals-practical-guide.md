@@ -181,9 +181,9 @@ After four weeks of fixes:
 - CLS dropped from 0.28 → 0.03 (added image dimensions, pre-allocated space for chat widget)
 - INP dropped from 380ms → 95ms (deferred chat widget, lazy-loaded recommendations)
 
-Three months later, their organic search impressions were up 22% and conversion rate improved 8%. Same products, same prices, same copy — just faster.
+Three months later, their organic search impressions were up 22% and conversion rate improved 8%. Same products, same prices, same copy — just faster. The pattern holds across project types: the [React to Astro migration case study](/blog/ditching-react-for-astro/) shows an identical improvement profile on a SaaS marketing site, driven by the same root cause — too much JavaScript doing work the server could have done.
 
-Core Web Vitals are solvable. The fixes are not glamorous, but they compound. Start with your LCP image, eliminate your layout shifts, and measure your INP with real user data. That sequence alone will move the needle on most sites.
+Core Web Vitals are solvable. The fixes are not glamorous, but they compound. Start with your LCP image, eliminate your layout shifts, and measure your INP with real user data. That sequence alone will move the needle on most sites. If you'd rather have an expert take the first pass, [performance audits](/services/) start at €2,500 and are delivered within 5 business days.
 
 ---
 

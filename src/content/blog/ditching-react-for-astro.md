@@ -65,7 +65,7 @@ Start with your most content-heavy pages — blog posts, landing pages, document
 
 Audit your components for interactivity. You'll find that the majority of components that *look* interactive are actually just displaying data. Dropdown menus, accordions, tabs — these can often be rebuilt with CSS alone, eliminating their JavaScript entirely.
 
-Finally, measure before you ship. The Lighthouse improvement will be real, but the actual user experience improvement (INP, CLS, LCP) will be your real validation.
+Finally, measure before you ship. The Lighthouse improvement will be real, but the actual user experience improvement (INP, CLS, LCP) will be your real validation. If you want measurement patterns and specific fixes for each metric, the [Core Web Vitals practical guide](/blog/core-web-vitals-practical-guide/) goes deep on exactly that.
 
 ## The Results
 
@@ -104,7 +104,7 @@ For the SaaS marketing site: Total JavaScript shipped went from 380kb to 14kb. L
 
 Those numbers are why I've become an Astro advocate. Not because it's new and exciting, but because it genuinely solves a problem that matters: the web is too slow, and most of that slowness comes from unnecessary JavaScript.
 
-For content-heavy sites — marketing pages, portfolios, documentation, blogs — Astro is now my default. I reach for React when I need it, and I need it less often than I used to think.
+For content-heavy sites — marketing pages, portfolios, documentation, blogs — Astro is now my default. I reach for React when I need it, and I need it less often than I used to think. If you're considering a migration or greenfield project, [take a look at my services](/services/) — frontend builds start from €8,000 and performance is the first-class requirement from day one.
 
 ---
 

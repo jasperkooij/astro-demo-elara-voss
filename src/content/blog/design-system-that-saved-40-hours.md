@@ -123,7 +123,9 @@ At an average fully-loaded cost of $120/hour for a senior engineer, that's $1.77
 
 The 40 hours figure I use is conservative. It's based only on engineers, not design time saved, not QA time saved, not the reduced bug rate from consistent accessibility implementation. The real number is higher.
 
-Design systems are infrastructure. Like good infrastructure, the cost of building them is obvious and the cost of not building them is invisible until it becomes catastrophic.
+Design systems are infrastructure. Like good infrastructure, the cost of building them is obvious and the cost of not building them is invisible until it becomes catastrophic. For teams where UI consistency is solved but performance remains a blocker, the same compound-improvements logic applies — the [Core Web Vitals guide](/blog/core-web-vitals-practical-guide/) walks through how systematic fixes add up across LCP, CLS, and INP.
+
+If you're building a product team that needs this kind of investment, [the services page](/services/) has details on how I approach design system engagements — from token strategy through to team adoption.
 
 ---
 

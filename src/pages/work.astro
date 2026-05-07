@@ -2,6 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 
+const siteUrl = 'https://elaravoss.dev';
+const webpageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${siteUrl}/work/`,
+  name: 'Work — Elara Voss',
+  description: 'Selected projects by Elara Voss — design systems, performance engineering, real-time dashboards, and open source tools.',
+  url: `${siteUrl}/work/`,
+  isPartOf: { '@id': `${siteUrl}/#website` },
+};
+
 const projects = [
   {
     title: 'Meridian Design System',
@@ -53,6 +64,7 @@ const projects = [
   title="Work — Elara Voss"
   description="Selected projects by Elara Voss — design systems, performance engineering, real-time dashboards, and open source tools."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} slot="head" />
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
     <div class="mb-12">
       <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3">Work</p>

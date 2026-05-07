@@ -1,6 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const siteUrl = 'https://elaravoss.dev';
+const pageUrl = `${siteUrl}/services/`;
+const webpageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': pageUrl,
+  name: 'Services — Elara Voss',
+  description: 'Frontend development, design systems architecture, and performance consulting by Elara Voss. Based in Amsterdam, available remotely across Europe.',
+  url: pageUrl,
+  isPartOf: { '@id': `${siteUrl}/#website` },
+};
+
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -112,10 +124,14 @@ const faqs = [
   title="Services — Elara Voss"
   description="Frontend development, design systems architecture, and performance consulting by Elara Voss. Based in Amsterdam, available remotely across Europe."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)} slot="head" />
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} slot="head" />
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
     <div class="mb-12">
-      <p class="text-accent text-sm font-mono tracking-wide uppercase mb-3">Services</p>
+      <div class="flex items-center gap-4 mb-3">
+        <p class="text-accent text-sm font-mono tracking-wide uppercase">Services</p>
+        <p class="text-xs font-mono text-muted">Last updated: May 2026</p>
+      </div>
       <h1 class="text-4xl font-bold text-text mb-4">How I Can Help</h1>
       <p class="text-muted max-w-xl leading-relaxed">
         I work with product teams, startups, and agencies on frontend engineering, design systems,

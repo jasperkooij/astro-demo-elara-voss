@@ -45,6 +45,12 @@ Topics covered:
 
 This site is built with Astro 6, Tailwind CSS v4, TypeScript, and zero client-side JavaScript. It achieves a 100/100 Lighthouse Performance score and is deployed on Cloudflare Pages.
 
+## Full Text Corpus
+
+For AI models that want the complete site corpus in a single request:
+
+https://elaravoss.dev/llms-full.txt
+
 ## Sitemap
 
 https://elaravoss.dev/sitemap-index.xml

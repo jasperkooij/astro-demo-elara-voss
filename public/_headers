@@ -24,6 +24,9 @@
 /llms.txt
   Cache-Control: public, max-age=86400
 
+/llms-full.txt
+  Cache-Control: public, max-age=86400
+
 # Markdown versions of blog posts for AI crawlers
 /blog/*.md
   Content-Type: text/markdown; charset=utf-8
