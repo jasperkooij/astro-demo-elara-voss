@@ -25,10 +25,18 @@ const resolvedOgImage = ogImage?.startsWith('/')
   : (ogImage ?? `${siteUrl}og-default.jpg`);
 ---
 
+<script is:inline>
+  (function () {
+    try {
+      var t = localStorage.getItem('ev-theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
-<meta name="theme-color" content="#0d1117" />
+<meta name="theme-color" content="#12100e" />
 
 <title>{title}</title>
 <meta name="description" content={description} />

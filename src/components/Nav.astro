@@ -2,10 +2,17 @@
 const pathname = Astro.url.pathname;
 
 const links = [
-  { href: '/about/', label: 'About' },
-  { href: '/work/', label: 'Work' },
+  { href: '/about/',    label: 'About'    },
+  { href: '/work/',     label: 'Work'     },
   { href: '/services/', label: 'Services' },
-  { href: '/blog/', label: 'Blog' },
+  { href: '/blog/',     label: 'Blog'     },
+];
+
+const themes = [
+  { id: 'espresso', color: '#fb923c', label: 'Espresso' },
+  { id: 'studio',   color: '#7c3aed', label: 'Studio'   },
+  { id: 'midnight', color: '#ff6b6b', label: 'Midnight' },
+  { id: 'rose',     color: '#f43f5e', label: 'Rose'     },
 ];
 
 function isActive(href: string) {
@@ -27,39 +34,14 @@ function isActive(href: string) {
       Elara Voss
     </a>
 
-    <input
-      type="checkbox"
-      id="nav-toggle"
-      class="sr-only peer"
-    />
-    <label
-      for="nav-toggle"
-      class="md:hidden cursor-pointer text-muted hover:text-text transition-colors p-2 -mr-2"
-      aria-label="Toggle navigation menu"
-    >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <rect x="2" y="4" width="16" height="2" rx="1" />
-        <rect x="2" y="9" width="16" height="2" rx="1" />
-        <rect x="2" y="14" width="16" height="2" rx="1" />
-      </svg>
-    </label>
-
-    <ul
-      class="hidden peer-checked:flex absolute top-16 left-0 right-0 flex-col bg-surface border-b border-border px-4 py-4 gap-1 md:static md:flex md:flex-row md:bg-transparent md:border-none md:px-0 md:py-0 md:gap-6 md:items-center"
-      id="nav-menu"
-    >
-      {
-        links.map(({ href, label }) => (
+    <div class="flex items-center gap-4">
+      <!-- Desktop nav links -->
+      <ul class="hidden md:flex items-center gap-6">
+        {links.map(({ href, label }) => (
           <li>
             <a
               href={href}
-              class={`block py-2 md:py-0 text-sm font-medium transition-colors hover:text-text ${
+              class={`text-sm font-medium transition-colors hover:text-text ${
                 isActive(href) ? 'text-accent' : 'text-muted'
               }`}
               aria-current={isActive(href) ? 'page' : undefined}
@@ -67,8 +49,136 @@ function isActive(href: string) {
               {label}
             </a>
           </li>
-        ))
-      }
-    </ul>
+        ))}
+      </ul>
+
+      <!-- Separator -->
+      <div class="hidden md:block h-4 w-px bg-border" aria-hidden="true"></div>
+
+      <!-- Theme swatches -->
+      <div class="flex items-center gap-1.5" role="group" aria-label="Colour theme">
+        {themes.map(({ id, color, label }) => (
+          <button
+            data-theme-btn={id}
+            aria-label={`${label} theme`}
+            title={label}
+            class="theme-swatch"
+            style={`--sw: ${color}`}
+          />
+        ))}
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button
+        id="nav-toggle-btn"
+        class="md:hidden text-muted hover:text-text transition-colors p-1.5 -mr-1.5 rounded-md"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <rect x="2" y="4"  width="16" height="2" rx="1" />
+          <rect x="2" y="9"  width="16" height="2" rx="1" />
+          <rect x="2" y="14" width="16" height="2" rx="1" />
+        </svg>
+      </button>
+    </div>
   </nav>
+
+  <!-- Mobile dropdown -->
+  <div id="mobile-nav" class="hidden border-b border-border bg-surface md:hidden">
+    <ul class="max-w-5xl mx-auto px-4 py-3 flex flex-col gap-1">
+      {links.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class={`block py-2 text-sm font-medium transition-colors hover:text-text ${
+              isActive(href) ? 'text-accent' : 'text-muted'
+            }`}
+            aria-current={isActive(href) ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
 </header>
+
+<style>
+  .theme-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--sw);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .theme-swatch:hover {
+    transform: scale(1.25);
+  }
+  .theme-swatch[data-active] {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3.5px var(--color-text);
+  }
+  .theme-swatch:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3.5px var(--color-accent);
+  }
+</style>
+
+<script>
+  const THEME_COLORS: Record<string, string> = {
+    espresso: '#12100e',
+    studio:   '#faf8f5',
+    midnight: '#0d1526',
+    rose:     '#110e0e',
+  };
+
+  function init() {
+    const html = document.documentElement;
+
+    // Close mobile menu on each navigation
+    const menu = document.getElementById('mobile-nav');
+    const toggleBtn = document.getElementById('nav-toggle-btn');
+    menu?.classList.add('hidden');
+    toggleBtn?.setAttribute('aria-expanded', 'false');
+
+    // Mobile menu toggle
+    toggleBtn?.addEventListener('click', () => {
+      const open = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', String(!open));
+      menu?.classList.toggle('hidden', open);
+    });
+
+    // Sync swatch active state
+    const syncSwatches = () => {
+      const current = html.getAttribute('data-theme') || 'espresso';
+      document.querySelectorAll('[data-theme-btn]').forEach((el) => {
+        el.toggleAttribute('data-active', el.getAttribute('data-theme-btn') === current);
+      });
+    };
+
+    syncSwatches();
+
+    // Theme switch
+    document.querySelectorAll('[data-theme-btn]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const theme = el.getAttribute('data-theme-btn');
+        if (!theme) return;
+        html.classList.add('theme-transitioning');
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('ev-theme', theme);
+        syncSwatches();
+        document.querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', THEME_COLORS[theme] ?? '#12100e');
+        setTimeout(() => html.classList.remove('theme-transitioning'), 300);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>
